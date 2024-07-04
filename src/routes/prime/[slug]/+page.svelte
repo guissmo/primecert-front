@@ -113,7 +113,7 @@
             <span class="prime-info-container">
             <span class="aka">a.k.a.</span>
             <span class="prime-name">{
-                currentPrime ? (currentPrime.name ? `The ${currentPrime.name} Prime` : 'An Unnamed Prime') : 'Loading...'
+                currentPrime ? (currentPrime.name ? `${currentPrime.name}` : 'An Unnamed Prime') : 'Loading...'
             }</span>
             <span class="spacer"><img class='img-avatar' alt='a robot' src={`https://robohash.org/${st(currentPrime.n)}?set=set4`} /></span>
             <span class="info">
@@ -121,7 +121,7 @@
                 <br>&nbsp;&nbsp; E: y<sup>2</sup> = x<sup>3</sup> + <Hoverable displayed={variableName == "a"} locked={lockedVariableName && variableName == "a"} char="a" onClick={() => toggleLockVariableName("a")} onMouseEnter={() => viewedVariableName("a")} onMouseLeave={() => restorePreviousVariableName()}/>x + <Hoverable displayed={variableName == "b"} locked={lockedVariableName && variableName == "b"} char="b" onClick={() => toggleLockVariableName("b")} onMouseEnter={() => viewedVariableName("b")} onMouseLeave={() => restorePreviousVariableName()} />, &nbsp;&nbsp; defined modulo <Hoverable displayed={variableName == "N"} locked={lockedVariableName && variableName == "N"} char="N" onClick={() => toggleLockVariableName("N")} onMouseEnter={() => viewedVariableName("N")} onMouseLeave={() => restorePreviousVariableName()}/>
                 <br>has order <Hoverable displayed={variableName == "q"} locked={lockedVariableName && variableName == "q"} char="q" onClick={() => toggleLockVariableName("q")} onMouseEnter={() => viewedVariableName("q")} onMouseLeave={() => restorePreviousVariableName()} /> &gt; (N<sup>1/4</sup> + 1)<sup>2</sup>.</p>
                 <p class="theorem">Since <Hoverable displayed={variableName == "q"} locked={lockedVariableName && variableName == "q"} char="q" onClick={() => toggleLockVariableName("q")} onMouseEnter={() => viewedVariableName("q")} onMouseLeave={() => restorePreviousVariableName()}/> {#if lowQ}
-                    <span>is prime because it is less than 2<sup>64</sup> and does not pass <a class="proof-link" href="https://en.wikipedia.org/wiki/Baillie%E2%80%93PSW_primality_test" target="_blank">the Baillie–PSW test</a>,</span>
+                    <span>is prime because it is less than 2<sup>64</sup> and is a pseudoprime according to <a class="proof-link" href="https://en.wikipedia.org/wiki/Baillie%E2%80%93PSW_primality_test" target="_blank">the Baillie–PSW test</a>,</span>
                     {:else}
                     <span><a class="proof-link" on:mouseenter={() => viewedVariableName('q')} on:mouseleave={() => restorePreviousVariableName()} href={currentPrime && currentPrime.q ? `/prime/${st(currentPrime.q)}` : './'} data-sveltekit-reload>is prime</a>,</span>
                     {/if} then <Hoverable displayed={variableName == "N"} locked={lockedVariableName && variableName == "N"} char="N" onClick={() => toggleLockVariableName("N")} onMouseEnter={() => viewedVariableName("N")} onMouseLeave={() => restorePreviousVariableName()}/> is also prime.</p>
@@ -198,7 +198,7 @@
         .aka {
             font-size: 5rem;
             opacity: 0.5;
-            grid-area: "aka";
+            grid-area: aka;
         }
         .prime-name {
             font-size: 5rem;
@@ -210,13 +210,13 @@
             
         }
         .spacer {
-            grid-area: "spacer";
+            grid-area: spacer;
             width: 80%;
             justify-self: center;
             align-self: flex-start;
         }
         .info {
-            grid-area: "info";
+            grid-area: info;
             font-size: 3rem;
         }
         .proof-link {
