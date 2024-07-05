@@ -68,11 +68,13 @@
     }}>
     <div class="outer-div">
         <div class="container-div">
-            <div class="big-number-container">
-                <span class="big-number-label">N=</span><input bind:value={inputValue} class="big-number" placeholder="........................................."/>
-            </div>
-            <div class="tabs">
-                <a href={`/prime/${inputValue}`} class='tab-up'>Go</a>
+            <div style="position: fixed">
+                <div class="big-number-container">
+                    <span class="big-number-label">N=</span><input bind:value={inputValue} class="big-number" placeholder="........................................." maxlength="199"/>
+                </div>
+                <div class="tabs">
+                    <a href={`/prime/${inputValue}`} class='tab-up'>Go</a>
+                </div>
             </div>
             <div class="content">
                 <div class="header-container about-header"><span class="header">About</span></div>
@@ -81,6 +83,8 @@
                     <p>You could either type a prime above, click submit and name it, or choose one of the unnamed primes and name it!</p>
                     <h3>Just browsing?</h3>
                     <p>You could also just browse the other named primes!</p>
+                    <h3>How?</h3>
+                    <p>We are using <a href="https://pari.math.u-bordeaux.fr/">PARI/GP</a> under the hood to compute primality certificates.</p>
                 </div>
                 <div class="header-container list-header"><span class="header">Lists</span></div>
                 <div class="sub-content list-content">
@@ -108,19 +112,18 @@
             align-items: center;
             height: 100vh;
             width: 100vw;
-            background: green;
             padding: 0;
+            align-items: flex-start;
+            overflow-x: hidden;
         }
         .container-div {
-            height: 100vh;
-            width: 100vw;
             background: white;
             display: flex;
             justify-content: flex-start;
             flex-direction: column;
-            overflow: hidden;
         }
         .tabs {
+            height: 0;
             display: grid;
             justify-items: flex-end;
         }
@@ -133,7 +136,7 @@
             cursor: pointer;
             width: 20%;
             background: white;
-            font-size: 3rem;
+            font-size: 2rem;
             border: 1px solid white;
             color: black;
             box-shadow: 0px 5px 10px darkgray;
@@ -149,7 +152,7 @@
         .big-number-container {
             width: 100%;
             font-family:'Courier New', Courier, monospace;
-            background-color: none;
+            background-color: white;
             color: black;
             box-shadow: 0px 5px 10px darkgray;
             /* scrollbar-width: none; */
@@ -170,27 +173,28 @@
         }
         .content {
             display: grid;
-            padding-left: 10%;
-            padding-right: 10%;
-            grid-template-columns: 1fr 2fr;
+            padding-top: calc(15ex + 10rem);
+            padding-left: 1ex;
+            padding-right: 1ex;
+            grid-template-columns: 2fr 3fr;
             column-gap: 3ex;
-            row-gap: 1ex;
+            row-gap: 0.5ex;
             grid-template-areas:
             "aboutheader listheader"
             "aboutcontent listcontent";
         }
         .header-container {
-            font-size: 3rem;
+            font-size: 2rem;
             padding: 1ex;
         }
         .header {
+                z-index: 3;
                 font-family:'Courier New', Courier, monospace;
                 text-transform: uppercase;
                 padding: 1ex;
                 font-weight: 900;
                 cursor: pointer;
                 background: white;
-                font-size: 3rem;
                 border: 1px solid white;
                 color: black;
                 box-shadow: 0px 5px 10px darkgray;
@@ -204,13 +208,14 @@
         }
         .list-content {
             display: grid;
-            grid-template-columns: 5fr 3fr;
+            grid-template-columns: 1fr 1fr;
         }
         .about-header {
             grid-area: aboutheader;
         }
         .about-content {
             grid-area: aboutcontent;
+            overflow-y: scroll;
         }
         .list-header {
             grid-area: listheader;

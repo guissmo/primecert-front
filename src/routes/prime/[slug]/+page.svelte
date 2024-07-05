@@ -25,7 +25,7 @@
         b: bigint,
         x: bigint,
         y: bigint
-    } | undefined;
+    } | undefined | number = null;
 
     let lockedVariableName = true;
     let previousVariableName = 'N';
@@ -83,6 +83,11 @@
         return x.toString(10)
     }
 
+    let Ndisplay = '...'
+    const errorString = '?!?!!'
+
+    let isSmallPrime = false;
+
     async function loadPrime() {
         currentPrime = await fetch(`http://localhost:8000/get-all-info/${$page.params.slug}`)
         .then(async (response) => {
@@ -92,11 +97,20 @@
         .then(data => {
             return data
         }).catch(error => {
-            return {
-                n: 'ERROR',
-                name: 'ERROR',
-            };
+            return null;
         });
+        Ndisplay = function () {
+            console.log(currentPrime)
+            if (currentPrime && typeof(currentPrime) == 'object') {
+                return st(currentPrime.n)
+            }
+            if(typeof(currentPrime) == 'number') {
+                isSmallPrime = Boolean(currentPrime)
+                return $page.params.slug
+            }
+            return errorString
+            //    currentPrime ? st(currentPrime.n) : currentPrime == null ? Number.isNaN(Number($page.params.slug)) || !Number.isInteger(Number($page.params.slug)) ? 'NaN' : ($page.params.slug) : '...' 
+        }()
         if (currentPrime == null) {
             return;
         }
@@ -138,19 +152,6 @@
 
     }
 
-    const Ndisplay = function () {
-        if (currentPrime && typeof(currentPrime) == 'object') {
-            return st(currentPrime.n)
-        }
-        if(currentPrime == null) {
-            if(Number.isNaN(Number($page.params.slug)) || !Number.isInteger(Number($page.params.slug))){
-                return 'NaN'
-            }
-            return $page.params.slug
-        }
-        return '...'
-    //    currentPrime ? st(currentPrime.n) : currentPrime == null ? Number.isNaN(Number($page.params.slug)) || !Number.isInteger(Number($page.params.slug)) ? 'NaN' : ($page.params.slug) : '...' 
-    }()
 </script>
 
 <div class="outer-div">
@@ -160,12 +161,37 @@
                 {variableName+"="}{Ndisplay}
             </span>
         </div>
-        {#if currentPrime == null || (currentPrime && !currentPrime.n)}
-        <div class="tabs">
-            <a  on:click={()=>history.back()} href={'#'} class='tab-up'>Back</a>
+        {#if Ndisplay == errorString}
+        <div class="info-div">
+            <img class='img-avatar' alt='a robot' src={`https://robohash.org/error}?set=set4`} />
+            <span class="prime-info-container">
+            <span class="aka">a.k.a.</span>
+            <span class="prime-name">we have a problem.</span>
+            <span class="spacer">
+                <a href="/" class="nav">HOME</a>
+                <a href="#" on:click={() => { history.back() }} class="nav">BACK</a>
+            </span>
+            <span class="info">
+                It appears that you arrived at an invalid page.
+            </span>
         </div>
         {/if}
-        {#if currentPrime && currentPrime.n}
+        {#if typeof(currentPrime) == 'number'}
+        <div class="info-div">
+            <img class='img-avatar' alt='a robot' src={`https://robohash.org/${st(currentPrime.n)}?set=set4`} />
+            <span class="prime-info-container">
+            <span class="aka" style="visibility: hidden">a.k.a.</span>
+            <span class="prime-name"><Hoverable displayed={variableName == "N"} locked={true} char="N" onClick={() => {}} onMouseEnter={() => {}} onMouseLeave={() => {}} /> is {isSmallPrime ? 'prime' : 'not prime'}.</span>
+            <span class="spacer">
+                <a href="/" class="nav">HOME</a>
+                <a href="#" on:click={() => { history.back() }} class="nav">BACK</a>
+            </span>
+            <span class="info">
+                Isn't that interesting?
+            </span>
+        </div>
+        {/if}
+        {#if currentPrime && typeof(currentPrime) == 'object'}
         <div class="info-div">
             <img class='img-avatar' alt='a robot' src={`https://robohash.org/${st(currentPrime.n)}?set=set4`} />
             <span class="prime-info-container">
@@ -175,7 +201,7 @@
             {/if}
             {#if !currentPrime.name}
             <form action={`http://localhost:8000/claim-prime/${currentPrime.id}`} on:submit|preventDefault={handleSubmit}>
-                <input name="name" class="prime-name-input" placeholder="An Unnamed Prime"/>
+                <input name="name" class="prime-name-input" placeholder="An Unnamed Prime" minlength="4"/>
                 <button class="name-it" type="submit">Name It</button>
             </form>
             {/if}
