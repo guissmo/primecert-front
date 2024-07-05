@@ -84,9 +84,9 @@
                 <div class="header-container list-header"><span class="header">Lists</span></div>
                 <div class="sub-content list-content">
                     <div class="prime-list">
-                    <h3>Recently Named</h3>
+                    <h3>Named Primes</h3>
                     {#each recentlyNamed as item}
-                    <p><a href={`/prime/${item.n}`} class="clickable-prime">{item.name}</a></p>
+                    <p><a href={`/prime/${item.slug}`} class="clickable-prime">{item.name}</a></p>
                     {/each}
                     </div>
                     <div class="prime-list">

@@ -17,6 +17,7 @@
     let recentlyNamed: NamedPrime[] = []
 
     let currentPrime : null | {
+        id: string,
         name: string,
         n: bigint,
         q: bigint,
@@ -81,8 +82,8 @@
         }
         return x.toString(10)
     }
-    
-    onMount(async () => {
+
+    async function loadPrime() {
         currentPrime = await fetch(`http://localhost:8000/get-all-info/${$page.params.slug}`)
         .then(async (response) => {
             console.log(`http://localhost:8000/get-all-info/${$page.params.slug}`)
@@ -97,8 +98,42 @@
             };
         });
         viewedNumber = currentPrime ? currentPrime.n : undefined;
-        lowQ = Boolean(currentPrime && currentPrime.q && currentPrime.q < 18446744073709551616n)
-    })
+        lowQ = Boolean(currentPrime && currentPrime.q && currentPrime.q < 18446744073709551616n)    
+    }
+    
+    onMount(loadPrime)
+
+    async function handleSubmit (e: SubmitEvent) {
+
+        const target = e.target as HTMLFormElement
+        const ACTION_URL = new URL(target.action)
+
+        const formData = new FormData(target)
+        const data = new URLSearchParams()
+        let name = ''
+		for (let [key, value] of formData) {
+            if (key === 'name') {
+                name = value as string;
+            }
+        }
+
+        const slug = name.toLowerCase().replaceAll(" ", "-");
+        
+        const queryParams = new URLSearchParams(formData as any);
+        queryParams.append("slug", slug);
+
+        ACTION_URL.search = queryParams.toString();
+
+        console.log(data)
+        console.log(formData)
+
+        const response = await fetch(ACTION_URL, {
+				method: 'POST',
+		})
+        console.log(response);
+        await loadPrime();
+
+    }
 </script>
 
 <div class="outer-div">
@@ -112,9 +147,15 @@
         <div class="info-div">
             <span class="prime-info-container">
             <span class="aka">a.k.a.</span>
-            <span class="prime-name">{
-                currentPrime ? (currentPrime.name ? `${currentPrime.name}` : 'An Unnamed Prime') : 'Loading...'
-            }</span>
+            {#if currentPrime.name}
+            <span class="prime-name">{currentPrime.name}</span>
+            {/if}
+            {#if !currentPrime.name}
+            <form action={`http://localhost:8000/claim-prime/${currentPrime.id}`} on:submit|preventDefault={handleSubmit}>
+                <input name="name" class="prime-name-input" placeholder="An Unnamed Prime"/>
+                <button class="name-it" type="submit">Name It!</button>
+            </form>
+            {/if}
             <span class="spacer"><img class='img-avatar' alt='a robot' src={`https://robohash.org/${st(currentPrime.n)}?set=set4`} /></span>
             <span class="info">
                 <p class="theorem">The point P: ( <Hoverable displayed={variableName == "x"} locked={lockedVariableName && variableName == "x"} char="x" onClick={() => toggleLockVariableName("x")} onMouseEnter={() => viewedVariableName("x")} onMouseLeave={() => restorePreviousVariableName()} />, <Hoverable displayed={variableName == "y"} locked={lockedVariableName && variableName == "y"} char="y" onClick={() => toggleLockVariableName("y")} onMouseEnter={() => viewedVariableName("y")} onMouseLeave={() => restorePreviousVariableName()}/> ) on the elliptic curve
@@ -207,7 +248,28 @@
             overflow-y: none;
             white-space: nowrap;
             text-overflow: ellipsis;
-            
+        }
+        .prime-name-input {
+            font-size: 5rem;
+            font-weight: 900;
+            font-family: Georgia, Times, 'Times New Roman', serif;
+            border: none;
+            outline: none;
+            box-shadow: 0px 5px 10px darkgray;
+            padding: 10px;
+            width: 50rem;
+        }
+        .name-it {
+            font-size: 3rem;
+            font-weight: 900;
+            font-family:'Courier New', Courier, monospace;
+            text-transform: uppercase;
+            border: none;
+            outline: none;
+            box-shadow: 0px 5px 10px darkgray;
+            padding: 10px;
+            margin-left: 2rem;
+            background: white;
         }
         .spacer {
             grid-area: spacer;
