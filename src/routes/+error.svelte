@@ -1,9 +1,11 @@
 <script lang="ts">
-
+    
+    import { page } from '$app/stores';
     import { onMount } from "svelte";
     // @ts-ignore
     import JSONbig from "json-bigint";
     import Hoverable from '$lib/Hoverable.svelte';
+	import { sveltekit } from "@sveltejs/kit/vite";
 
     type UnnamedPrime = {
         id: String,
@@ -63,44 +65,20 @@
         });
     </script>
     
-    
-    <form on:submit={()=>{
-    }}>
+
     <div class="outer-div">
         <div class="container-div">
             <div class="big-number-container">
-                <span class="big-number-label">N=</span><input bind:value={inputValue} class="big-number" placeholder="........................................."/>
+                <span class="big-number-label">E={$page.status}</span>
             </div>
             <div class="tabs">
-                <a href={`/prime/${inputValue}`} class='tab-up'>Go</a>
+                <a  on:click={()=>history.back()} href={'#'} class='tab-up'>Back</a>
             </div>
             <div class="content">
-                <div class="header-container about-header"><span class="header">About</span></div>
-                <div class="sub-content about-content">
-                    <h3>Wanna name a prime?</h3>
-                    <p>You could either type a prime above, click submit and name it, or choose one of the unnamed primes and name it!</p>
-                    <h3>Just browsing?</h3>
-                    <p>You could also just browse the other named primes!</p>
-                </div>
-                <div class="header-container list-header"><span class="header">Lists</span></div>
-                <div class="sub-content list-content">
-                    <div class="prime-list">
-                    <h3>Named Primes</h3>
-                    {#each recentlyNamed as item}
-                    <p><a href={`/prime/${item.slug}`} class="clickable-prime">{item.name}</a></p>
-                    {/each}
-                    </div>
-                    <div class="prime-list">
-                    <h3>Unnamed Primes</h3>
-                        {#each unnamed as item}
-                        <p><a href={`/prime/${item.n}`} class="clickable-prime">{item.n.substring(0, 5)}... ...{item.n.substring(item.n.length-5, item.n.length)}</a></p>
-                        {/each}
-                    </div>
-                </div>
+                <span class="prime-name">{$page.error?.message}</span>
             </div>
         </div>
     </div>
-    </form>
 <style>
     .outer-div {
             display: flex;
@@ -179,56 +157,15 @@
             "aboutheader listheader"
             "aboutcontent listcontent";
         }
-        .header-container {
-            font-size: 3rem;
-            padding: 1ex;
-        }
-        .header {
-                font-family:'Courier New', Courier, monospace;
-                text-transform: uppercase;
-                padding: 1ex;
-                font-weight: 900;
-                cursor: pointer;
-                background: white;
-                font-size: 3rem;
-                border: 1px solid white;
-                color: black;
-                box-shadow: 0px 5px 10px darkgray;
-            }
-        .sub-content {
+        .prime-name {
+            font-size: 5rem;
+            font-weight: 900;
+            overflow-x: scroll;
+            overflow-y: none;
+            white-space: nowrap;
+            text-overflow: ellipsis;
             font-family: Georgia, Times, 'Times New Roman', serif;
-            background: white;
-            box-shadow: 0px 5px 10px darkgray;
-            font-size: 3ex;
-            padding: 3ex;
-        }
-        .list-content {
-            display: grid;
-            grid-template-columns: 5fr 3fr;
-        }
-        .about-header {
-            grid-area: aboutheader;
-        }
-        .about-content {
-            grid-area: aboutcontent;
-        }
-        .list-header {
-            grid-area: listheader;
-        }
-        .list-content {
-            grid-area: listcontent;
-        }
-        .prime-list {
-            width: 90%;
-        }
-        .clickable-prime {
-            display: inline-block;
-            font-family:'Courier New', Courier, monospace;
-            text-decoration: none;
-            padding: 0 1ex;
-            color: white;
-            background-color: navy;
-            text-decoration: none;
+            padding-top: 1rem;
         }
 </style>
     
