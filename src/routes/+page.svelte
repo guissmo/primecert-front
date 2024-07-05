@@ -21,6 +21,7 @@
     let unnamed: UnnamedPrime[] = []
     let recentlyNamed: NamedPrime[] = []
 
+    const highlightColors = ['#ffadad', '#ffd6a5', '#fdffb6', '#caffbf', '#9bf6ff', '#a0c4ff', '#bdb2ff', '#ffc6ff']
     
     onMount(async () => {
         unnamed = await fetch("http://localhost:8000/primes/unnamed")
@@ -62,9 +63,10 @@
         });
         });
     </script>
-    
-    
+        
     <form on:submit={()=>{
+        // @ts-ignore
+        window.location = `/prime/${inputValue}`
     }}>
     <div class="outer-div">
         <div class="container-div">
@@ -91,13 +93,13 @@
                     <div class="prime-list">
                     <h3>Named Primes</h3>
                     {#each recentlyNamed as item}
-                    <p><a href={`/prime/${item.slug}`} class="clickable-prime">{item.name}</a></p>
+                    <p><a href={`/prime/${item.slug}`} style={`--color: ${highlightColors[Math.floor(Math.random()*highlightColors.length)]}`} class="clickable-prime">{item.name}</a></p>
                     {/each}
                     </div>
                     <div class="prime-list">
                     <h3>Unnamed Primes</h3>
                         {#each unnamed as item}
-                        <p><a href={`/prime/${item.n}`} class="clickable-prime">{item.n.substring(0, 5)}... ...{item.n.substring(item.n.length-5, item.n.length)}</a></p>
+                        <p><a href={`/prime/${item.n}`} style={`--color: ${highlightColors[Math.floor(Math.random()*highlightColors.length)]}`} class="clickable-prime">{item.n.substring(0, 5)}... ...{item.n.substring(item.n.length-5, item.n.length)}</a></p>
                         {/each}
                     </div>
                 </div>
@@ -231,8 +233,8 @@
             font-family:'Courier New', Courier, monospace;
             text-decoration: none;
             padding: 0 1ex;
-            color: white;
-            background-color: navy;
+            color: black;
+            background-color: var(--color);
             text-decoration: none;
         }
 </style>

@@ -35,6 +35,7 @@
     let lowQ = false;
 
     function updateViewedNumber(s: string) {
+        console.log(currentPrime)
         switch(s){
             case 'N': viewedNumber = currentPrime?.n; break;
             case 'q': viewedNumber = currentPrime?.q; break;
@@ -158,7 +159,7 @@
     <div class="container-div">
         <div class="big-number-container">
             <span class="big-number">
-                {variableName+"="}{Ndisplay}
+                {variableName+"="}{typeof(currentPrime) == 'object' ? viewedNumber == BigInt(0) ? '' : st(viewedNumber) : Ndisplay}
             </span>
         </div>
         {#if Ndisplay == errorString}
@@ -169,7 +170,9 @@
             <span class="prime-name">we have a problem.</span>
             <span class="spacer">
                 <a href="/" class="nav">HOME</a>
-                <a href="#" on:click={() => { history.back() }} class="nav">BACK</a>
+                <a href="#" on:click={() => { 
+                    history.back()
+                }} class="nav">BACK</a>
             </span>
             <span class="info">
                 It appears that you arrived at an invalid page.
@@ -184,7 +187,9 @@
             <span class="prime-name"><Hoverable displayed={variableName == "N"} locked={true} char="N" onClick={() => {}} onMouseEnter={() => {}} onMouseLeave={() => {}} /> is {isSmallPrime ? 'prime' : 'not prime'}.</span>
             <span class="spacer">
                 <a href="/" class="nav">HOME</a>
-                <a href="#" on:click={() => { history.back() }} class="nav">BACK</a>
+                <a href="#" on:click={() => { 
+                    history.back()
+                }} class="nav">BACK</a>
             </span>
             <span class="info">
                 Isn't that interesting?
@@ -207,7 +212,9 @@
             {/if}
             <span class="spacer">
                 <a href="/" class="nav">HOME</a>
-                <a href="#" on:click={() => { history.back() }} class="nav">BACK</a>
+                <a href="#" on:click={() => { 
+                    history.back()
+                }} class="nav">BACK</a>
             </span>
             <span class="info">
                 <p class="theorem">The point P: ( <Hoverable displayed={variableName == "x"} locked={lockedVariableName && variableName == "x"} char="x" onClick={() => toggleLockVariableName("x")} onMouseEnter={() => viewedVariableName("x")} onMouseLeave={() => restorePreviousVariableName()} />, <Hoverable displayed={variableName == "y"} locked={lockedVariableName && variableName == "y"} char="y" onClick={() => toggleLockVariableName("y")} onMouseEnter={() => viewedVariableName("y")} onMouseLeave={() => restorePreviousVariableName()}/> ) on the elliptic curve
