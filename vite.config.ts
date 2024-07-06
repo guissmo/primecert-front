@@ -4,8 +4,9 @@ import { defineConfig } from 'vite';
 export default defineConfig({
 	plugins: [sveltekit()],
 	build: {
-    rollupOptions: {
-      external: ['fsevents'],
-    },
-  },
+		rollupOptions: {
+			external: ['fsevents']
+		}
+	}
+	
 });

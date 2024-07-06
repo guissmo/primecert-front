@@ -1,12 +1,21 @@
-FROM node:12 AS build
+# Stage 1: Build the Svelte app
+FROM node:20 AS build
 
+# Set the working directory
 WORKDIR /app
 
-COPY package.json ./
-COPY package-lock.json ./
+# Copy package.json and package-lock.json
+COPY package*.json ./
+
+# Install dependencies
 RUN npm install
-COPY . ./
+
+# Copy the rest of the application
+COPY . .
+
 RUN npm run build
 
-FROM nginx:1.19-alpine
-COPY --from=build /app/public /usr/share/nginx/html
+ENV HOST=0.0.0.0
+ENV PORT=6969
+
+CMD [ "node", "build" ]
