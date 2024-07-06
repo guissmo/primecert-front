@@ -6,6 +6,7 @@
     import JSONbig from "json-bigint";
 
     import Hoverable from '$lib/Hoverable.svelte';
+	import { PUBLIC_SVELTE_BASE_API_URL } from '$env/static/public';
 
     type NamedPrime = {
         id: String,
@@ -90,9 +91,8 @@
     let isSmallPrime = false;
 
     async function loadPrime() {
-        currentPrime = await fetch(`http://localhost:8000/get-all-info/${$page.params.slug}`)
+        currentPrime = await fetch(`${PUBLIC_SVELTE_BASE_API_URL}/get-all-info/${$page.params.slug}`)
         .then(async (response) => {
-            console.log(`http://localhost:8000/get-all-info/${$page.params.slug}`)
             return JSONbig.parse(await response.text())
         })
         .then(data => {
@@ -205,7 +205,7 @@
             <span class="prime-name">{currentPrime.name}</span>
             {/if}
             {#if !currentPrime.name}
-            <form action={`http://localhost:8000/claim-prime/${currentPrime.id}`} on:submit|preventDefault={handleSubmit}>
+            <form action={`${PUBLIC_SVELTE_BASE_API_URL}/claim-prime/${currentPrime.id}`} on:submit|preventDefault={handleSubmit}>
                 <input name="name" class="prime-name-input" placeholder="An Unnamed Prime" minlength="4"/>
                 <button class="name-it" type="submit">Name It</button>
             </form>

@@ -4,6 +4,7 @@
     // @ts-ignore
     import JSONbig from "json-bigint";
     import Hoverable from '$lib/Hoverable.svelte';
+	import { PUBLIC_SVELTE_BASE_API_URL } from "$env/static/public";
 
     type UnnamedPrime = {
         id: String,
@@ -24,7 +25,7 @@
     const highlightColors = ['#ffadad', '#ffd6a5', '#fdffb6', '#caffbf', '#9bf6ff', '#a0c4ff', '#bdb2ff', '#ffc6ff']
     
     onMount(async () => {
-        unnamed = await fetch("http://localhost:8000/primes/unnamed")
+        unnamed = await fetch(`${PUBLIC_SVELTE_BASE_API_URL}/primes/unnamed`)
         .then(async (response) => {
             return JSONbig.parse(await response.text())
         })
@@ -42,7 +43,7 @@
             return '{}';
         });
 
-        recentlyNamed = await fetch("http://localhost:8000/primes/recently-named")
+        recentlyNamed = await fetch(`${PUBLIC_SVELTE_BASE_API_URL}/primes/recently-named`)
         .then(async (response) => {
             return JSONbig.parse(await response.text())
         })
@@ -66,7 +67,7 @@
         
     <form on:submit={()=>{
         // @ts-ignore
-        window.location = `/prime/${inputValue}`
+        // window.location = `/prime/${inputValue}`
     }}>
     <div class="outer-div">
         <div class="container-div">

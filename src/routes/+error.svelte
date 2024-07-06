@@ -6,6 +6,7 @@
     import JSONbig from "json-bigint";
     import Hoverable from '$lib/Hoverable.svelte';
 	import { sveltekit } from "@sveltejs/kit/vite";
+	import { PUBLIC_SVELTE_BASE_API_URL } from '$env/static/public';
 
     type UnnamedPrime = {
         id: String,
@@ -25,7 +26,7 @@
 
     
     onMount(async () => {
-        unnamed = await fetch("http://localhost:8000/primes/unnamed")
+        unnamed = await fetch(`${PUBLIC_SVELTE_BASE_API_URL}/primes/unnamed`)
         .then(async (response) => {
             return JSONbig.parse(await response.text())
         })
@@ -43,7 +44,7 @@
             return '{}';
         });
 
-        recentlyNamed = await fetch("http://localhost:8000/primes/recently-named")
+        recentlyNamed = await fetch(`${PUBLIC_SVELTE_BASE_API_URL}/primes/recently-named`)
         .then(async (response) => {
             return JSONbig.parse(await response.text())
         })
@@ -72,7 +73,7 @@
                 <span class="big-number-label">E={$page.status}</span>
             </div>
             <div class="tabs">
-                <a  on:click={()=>history.back()} href={'#'} class='tab-up'>Back</a>
+                <a on:click={()=>history.back()} href={'#'} class='tab-up'>Back</a>
             </div>
             <div class="content">
                 <span class="prime-name">{$page.error?.message}</span>
