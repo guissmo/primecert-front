@@ -1,7 +1,7 @@
 import { JSONParse } from 'json-with-bigint';
 import { PUBLIC_BASE_API_URL } from '$env/static/public';
 
-async function fetchGeneric(endpoint: string): Promise<NamedPrimeEntry[]> {
+export async function fetchGeneric(endpoint: string): Promise<NamedPrimeEntry[]> {
   return await fetch(`${PUBLIC_BASE_API_URL}${endpoint}`)
     .then(async (response) => {
       return JSONParse(await response.text());
