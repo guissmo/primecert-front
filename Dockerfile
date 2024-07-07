@@ -4,6 +4,9 @@ FROM node:20 AS build
 # Set the working directory
 WORKDIR /app
 
+ARG PUBLIC_BASE_API_URL
+ENV PUBLIC_BASE_API_URL $PUBLIC_BASE_API_URL
+
 # Copy package.json and package-lock.json
 COPY package*.json ./
 
