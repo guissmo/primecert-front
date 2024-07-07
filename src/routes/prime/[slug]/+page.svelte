@@ -10,6 +10,9 @@
   import PrimeName from '$lib/PrimeName.svelte';
   import Aka from '$lib/Aka.svelte';
   import PrimePageContent from '$lib/PrimePageContent.svelte';
+  import { getPrimeInfo } from '$lib/fetch';
+  import BigNumberNavigation from '$lib/BigNumberNavigation.svelte';
+  import BigNumber from '$lib/BigNumber.svelte';
 
   type NamedPrime = {
     id: String;
@@ -20,20 +23,8 @@
 
   let recentlyNamed: NamedPrime[] = [];
 
-  let currentPrime:
-    | null
-    | {
-        id: string;
-        name: string;
-        n: bigint;
-        q: bigint;
-        a: bigint;
-        b: bigint;
-        x: bigint;
-        y: bigint;
-      }
-    | undefined
-    | number = null;
+  let primeInfoEntry: GetPrimeInfoResponse;
+  let primeInfoResponse: GetPrimeInfoResponse | undefined | null;
 
   let lockedVariableName = true;
   let previousVariableName = 'N';
@@ -42,28 +33,33 @@
 
   let lowQ = false;
 
+  let result: GetPrimeInfoResponse | undefined | null;
+  async function fetchData() {
+    result = await getPrimeInfo($page.params.slug);
+  }
+
   function updateViewedNumber(s: string) {
-    if (typeof currentPrime == 'number') {
+    if (typeof primeInfoEntry == 'number') {
       return;
     }
     switch (s) {
       case 'N':
-        viewedNumber = currentPrime?.n;
+        viewedNumber = primeInfoEntry?.n;
         break;
       case 'q':
-        viewedNumber = currentPrime?.q;
+        viewedNumber = primeInfoEntry?.q;
         break;
       case 'x':
-        viewedNumber = currentPrime?.x;
+        viewedNumber = primeInfoEntry?.x;
         break;
       case 'y':
-        viewedNumber = currentPrime?.y;
+        viewedNumber = primeInfoEntry?.y;
         break;
       case 'a':
-        viewedNumber = currentPrime?.a;
+        viewedNumber = primeInfoEntry?.a;
         break;
       case 'b':
-        viewedNumber = currentPrime?.b;
+        viewedNumber = primeInfoEntry?.b;
         break;
     }
   }
@@ -112,37 +108,36 @@
   let isSmallPrime = false;
 
   async function loadPrime() {
-    currentPrime = await fetch(`${PUBLIC_BASE_API_URL}/get-all-info/${$page.params.slug}`)
-      .then(async (response) => {
-        return JSONParse(await response.text());
-      })
-      .then((data) => {
-        return data;
-      })
-      .catch((error) => {
-        return null;
-      });
+    primeInfoResponse = await getPrimeInfo($page.params.slug);
+
+    if (primeInfoResponse) {
+      primeInfoEntry = primeInfoResponse;
+    } else {
+      primeInfoEntry = null;
+    }
+
     Ndisplay = (function () {
-      console.log(currentPrime);
-      if (currentPrime && typeof currentPrime == 'object') {
-        return st(currentPrime.n);
+      console.log(primeInfoEntry);
+      if (primeInfoEntry && typeof primeInfoEntry == 'object') {
+        return st(primeInfoEntry.n);
       }
-      if (typeof currentPrime == 'number') {
-        isSmallPrime = Boolean(currentPrime);
+      if (typeof primeInfoEntry == 'number') {
+        isSmallPrime = Boolean(primeInfoEntry);
         return $page.params.slug;
       }
       return errorString;
       //    currentPrime ? st(currentPrime.n) : currentPrime == null ? Number.isNaN(Number($page.params.slug)) || !Number.isInteger(Number($page.params.slug)) ? 'NaN' : ($page.params.slug) : '...'
     })();
-    if (currentPrime == null) {
+    if (primeInfoEntry == null) {
       return;
     }
-    viewedNumber = currentPrime && typeof currentPrime != 'number' ? currentPrime.n : undefined;
+    viewedNumber =
+      primeInfoEntry && typeof primeInfoEntry != 'number' ? primeInfoEntry.n : undefined;
     lowQ = Boolean(
-      currentPrime &&
-        typeof currentPrime != 'number' &&
-        currentPrime.q &&
-        currentPrime.q < 18446744073709551616n,
+      primeInfoEntry &&
+        typeof primeInfoEntry != 'number' &&
+        primeInfoEntry.q &&
+        primeInfoEntry.q < 18446744073709551616n,
     );
   }
 
@@ -179,11 +174,72 @@
   }
 </script>
 
-<div class="outer-div">
+{#await fetchData()}
+  <BigNumber />
+  <div class="info-div">
+    <span class="prime-info-container">
+      <Aka />
+      <PrimeName>loading.</PrimeName>
+      <PrimeNavBar />
+      <PrimePageContent>Hmm.</PrimePageContent>
+    </span>
+  </div>
+{:then}
+  {#if !result}
+    <BigNumber label="N=" />
+    <div class="info-div">
+      <span class="prime-info-container">
+        <Aka />
+        <PrimeName>there was an unexpected problem.</PrimeName>
+        <PrimeNavBar />
+        <PrimePageContent>Sad.</PrimePageContent>
+      </span>
+    </div>
+  {:else if 'error' in result}
+    <BigNumber label="N=" />
+    <div class="info-div">
+      <span class="prime-info-container">
+        <Aka />
+        <PrimeName>{result['error']}</PrimeName>
+        <PrimeNavBar />
+        <PrimePageContent>Sad.</PrimePageContent>
+      </span>
+    </div>
+  {:else}
+    <BigNumber label={`N=${result.n}`} />
+    <div class="info-div">
+      <span class="prime-info-container">
+        <Aka />
+        {#if result.name}
+          <PrimeName>{result.name}</PrimeName>
+        {:else}
+          <PrimeName>
+            <form
+              action={`${PUBLIC_BASE_API_URL}/claim-prime/${result.id}`}
+              on:submit|preventDefault={handleSubmit}
+            >
+              <input
+                name="name"
+                class="prime-name-input"
+                placeholder="An Unnamed Prime"
+                minlength="4"
+              />
+              <button class="name-it" type="submit">Name It</button>
+            </form>
+          </PrimeName>
+        {/if}
+        <PrimeNavBar />
+        <PrimePageContent>Yay.</PrimePageContent>
+      </span>
+    </div>
+  {/if}
+{/await}
+
+<!-- <div class="outer-div">
   <div class="container-div">
     <div class="big-number-container">
       <span class="big-number">
-        {variableName + '='}{typeof currentPrime == 'object'
+        {variableName + '='}{typeof primeInfoEntry == 'object'
           ? viewedNumber == BigInt(0)
             ? ''
             : st(viewedNumber)
@@ -200,12 +256,12 @@
         </span>
       </div>
     {/if}
-    {#if typeof currentPrime == 'number'}
+    {#if typeof primeInfoEntry == 'number'}
       <div class="info-div">
         <img
           class="img-avatar"
           alt="a robot"
-          src={`https://robohash.org/${currentPrime.toString(10)}?set=set4`}
+          src={`https://robohash.org/${primeInfoEntry.toString(10)}?set=set4`}
         />
         <span class="prime-info-container">
           <Aka />
@@ -224,21 +280,21 @@
         </span>
       </div>
     {/if}
-    {#if currentPrime && typeof currentPrime == 'object'}
+    {#if primeInfoEntry && typeof primeInfoEntry == 'object'}
       <div class="info-div">
         <img
           class="img-avatar"
           alt="a robot"
-          src={`https://robohash.org/${st(currentPrime.n)}?set=set4`}
+          src={`https://robohash.org/${st(primeInfoEntry.n)}?set=set4`}
         />
         <span class="prime-info-container">
           <Aka />
-          {#if currentPrime.name}
-            <span class="prime-name">{currentPrime.name}</span>
+          {#if primeInfoEntry.name}
+            <span class="prime-name">{primeInfoEntry.name}</span>
           {/if}
-          {#if !currentPrime.name}
+          {#if !primeInfoEntry.name}
             <form
-              action={`${PUBLIC_BASE_API_URL}/claim-prime/${currentPrime.id}`}
+              action={`${PUBLIC_BASE_API_URL}/claim-prime/${primeInfoEntry.id}`}
               on:submit|preventDefault={handleSubmit}
             >
               <input
@@ -323,7 +379,9 @@
                     class="proof-link"
                     on:mouseenter={() => viewedVariableName('q')}
                     on:mouseleave={() => restorePreviousVariableName()}
-                    href={currentPrime && currentPrime.q ? `/prime/${st(currentPrime.q)}` : './'}
+                    href={primeInfoEntry && primeInfoEntry.q
+                      ? `/prime/${st(primeInfoEntry.q)}`
+                      : './'}
                     data-sveltekit-reload>is prime</a
                   >,</span
                 >
@@ -343,45 +401,9 @@
       <div class="info-div">&nbsp;</div>
     {/if}
   </div>
-</div>
+</div> -->
 
 <style>
-  .outer-div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    width: 100vw;
-    background: green;
-    padding: 0;
-  }
-  .container-div {
-    height: 100vh;
-    width: 100vw;
-    background: white;
-    display: flex;
-    justify-content: flex-start;
-    flex-direction: column;
-    overflow: hidden;
-  }
-  .big-number-container {
-    flex-shrink: 0;
-    width: 100%;
-    overflow-x: scroll;
-    font-family: 'Courier New', Courier, monospace;
-    background-color: none;
-    color: black;
-    box-shadow: 0px 5px 10px darkgray;
-    /* scrollbar-width: none; */
-    padding: 0.3ex;
-    padding-top: 10ex;
-  }
-  .big-number {
-    font-size: 10rem;
-  }
-  /* .big-number-container::-webkit-scrollbar {
-            display: none;
-        } */
   .info-div {
     flex-grow: 1;
     padding-left: 10ex;
@@ -414,6 +436,7 @@
     box-shadow: 0px 5px 10px darkgray;
     padding: 10px;
     width: 50rem;
+    z-index: 2;
   }
   .name-it {
     font-size: 3rem;

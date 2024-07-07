@@ -10,5 +10,6 @@
     overflow-y: none;
     white-space: nowrap;
     text-overflow: ellipsis;
+    padding: 10px;
   }
 </style>

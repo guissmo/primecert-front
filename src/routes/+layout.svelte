@@ -20,6 +20,7 @@
     justify-content: flex-start;
     flex-direction: column;
     height: 100vh;
+    width: 100vw;
     overflow: hidden;
   }
 </style>
