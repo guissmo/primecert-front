@@ -3,22 +3,11 @@
   import { JSONParse } from 'json-with-bigint';
   import Hoverable from '$lib/Hoverable.svelte';
   import { PUBLIC_BASE_API_URL } from '$env/static/public';
-
-  type UnnamedPrime = {
-    id: String;
-    n: string;
-  };
-
-  type NamedPrime = {
-    id: String;
-    n: string;
-    name: string;
-    slug: string;
-  };
+  import { fetchRecentlyNamedPrimes, fetchUnnamedPrimes } from '$lib/fetch';
 
   let inputValue = '';
-  let unnamed: UnnamedPrime[] = [];
-  let recentlyNamed: NamedPrime[] = [];
+  let unnamed: UnnamedPrimeEntry[] = [];
+  let recentlyNamed: NamedPrimeEntry[] = [];
 
   const highlightColors = [
     '#ffadad',
@@ -32,47 +21,8 @@
   ];
 
   onMount(async () => {
-    unnamed = await fetch(`${PUBLIC_BASE_API_URL}/primes/unnamed`)
-      .then(async (response) => {
-        return JSONParse(await response.text());
-      })
-      .then((data) => {
-        // @ts-ignore
-        const ret = data.map((onePrime: UnnamedPrime) => {
-          return {
-            id: onePrime.id,
-            //@ts-ignore
-            n: onePrime.n.toString(10),
-          };
-        });
-        return ret;
-      })
-      .catch((error) => {
-        console.log(error);
-        return '{}';
-      });
-
-    recentlyNamed = await fetch(`${PUBLIC_BASE_API_URL}/primes/recently-named`)
-      .then(async (response) => {
-        return JSONParse(await response.text());
-      })
-      .then((data) => {
-        // @ts-ignore
-        const ret = data.map((onePrime: NamedPrime) => {
-          return {
-            id: onePrime.id,
-            //@ts-ignore
-            n: onePrime.n.toString(10),
-            name: onePrime.name,
-            slug: onePrime.slug,
-          };
-        });
-        return ret;
-      })
-      .catch((error) => {
-        console.log(error);
-        return '{}';
-      });
+    unnamed = await fetchUnnamedPrimes();
+    recentlyNamed = await fetchRecentlyNamedPrimes();
   });
 </script>
 
