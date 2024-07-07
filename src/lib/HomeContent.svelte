@@ -33,14 +33,14 @@
 <style>
   .home-grid {
     display: grid;
-    /* padding-top: calc(15ex + 10rem); */
     padding-left: 1ex;
     padding-right: 1ex;
+    grid-template-rows: calc(15ex) 1fr;
     grid-template-columns: 2fr 3fr;
     column-gap: 3ex;
     row-gap: 2ex;
     grid-template-areas:
-      'aboutcontainer listcontainer'
+      'about-container list-container'
       'aboutcontent listcontent';
     overflow-y: scroll;
     height: 100%;
@@ -62,14 +62,14 @@
     align-self: flex-end;
   }
   .about-container {
-    grid-area: aboutcontainer;
+    grid-area: about-container;
   }
   .about-content {
     grid-area: aboutcontent;
     overflow-y: scroll;
   }
   .list-container {
-    grid-area: listcontainer;
+    grid-area: list-container;
   }
   .list-content {
     grid-area: listcontent;

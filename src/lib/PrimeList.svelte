@@ -24,7 +24,7 @@
 <div class="prime-list" style={`width: ${width}`}>
   <h3>{title}</h3>
   {#await fetchPrimeList()}
-    <div>Loading.</div>
+    <div>Loading...</div>
   {:then data}
     {#each data as item}
       <p>
