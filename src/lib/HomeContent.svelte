@@ -25,8 +25,8 @@
     <HomeHeader title="List" />
   </div>
   <div class="sub-content list-content">
-    <PrimeList title="Recently Named" endpoint="/primes/recently-named" />
-    <PrimeList title="Unnamed" endpoint="/primes/unnamed" />
+    <PrimeList title="Recently Named" endpoint="recently-named" />
+    <PrimeList title="Unnamed" endpoint="unnamed" />
   </div>
 </div>
 

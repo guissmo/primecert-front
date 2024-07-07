@@ -1,13 +1,12 @@
 <script lang="ts">
   import LinkPrime from './LinkPrime.svelte';
-  import { fetchGeneric } from './fetch';
-
+  import { fetchPrimeGeneric } from './fetch';
   export let title: string;
   export let endpoint: string;
   export let width: string = '90%';
 
   async function fetchPrimeList() {
-    return fetchGeneric(endpoint);
+    return fetchPrimeGeneric(endpoint);
   }
 
   function getPrimeHref(item: NamedPrimeEntry) {
