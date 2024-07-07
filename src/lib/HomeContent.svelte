@@ -1,9 +1,12 @@
 <script lang="ts">
+  import HomeHeader from './HomeHeader.svelte';
   import PrimeList from './PrimeList.svelte';
 </script>
 
-<div class="content">
-  <div class="header-container about-header"><span class="header">About</span></div>
+<div class="home-grid">
+  <div class="header-container about-container">
+    <HomeHeader title="About" />
+  </div>
   <div class="sub-content about-content">
     <h3>Wanna name a prime?</h3>
     <p>
@@ -18,7 +21,9 @@
       certificates.
     </p>
   </div>
-  <div class="header-container list-header"><span class="header">Lists</span></div>
+  <div class="header-container list-container">
+    <HomeHeader title="List" />
+  </div>
   <div class="sub-content list-content">
     <PrimeList title="Recently Named" endpoint="/primes/recently-named" />
     <PrimeList title="Unnamed" endpoint="/primes/unnamed" />
@@ -26,34 +31,19 @@
 </div>
 
 <style>
-  .content {
+  .home-grid {
     display: grid;
     /* padding-top: calc(15ex + 10rem); */
     padding-left: 1ex;
     padding-right: 1ex;
     grid-template-columns: 2fr 3fr;
     column-gap: 3ex;
-    row-gap: 0.5ex;
+    row-gap: 2ex;
     grid-template-areas:
-      'aboutheader listheader'
+      'aboutcontainer listcontainer'
       'aboutcontent listcontent';
     overflow-y: scroll;
     height: 100%;
-  }
-  .header-container {
-    font-size: 2rem;
-    padding: 1ex;
-  }
-  .header {
-    font-family: 'Courier New', Courier, monospace;
-    text-transform: uppercase;
-    padding: 1ex;
-    font-weight: 900;
-    cursor: pointer;
-    background: white;
-    border: 1px solid white;
-    color: black;
-    box-shadow: 0px 5px 10px darkgray;
   }
   .sub-content {
     font-family: Georgia, Times, 'Times New Roman', serif;
@@ -66,15 +56,20 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
   }
-  .about-header {
-    grid-area: aboutheader;
+  .header-container {
+    font-size: 2rem;
+    padding: 1ex;
+    align-self: flex-end;
+  }
+  .about-container {
+    grid-area: aboutcontainer;
   }
   .about-content {
     grid-area: aboutcontent;
     overflow-y: scroll;
   }
-  .list-header {
-    grid-area: listheader;
+  .list-container {
+    grid-area: listcontainer;
   }
   .list-content {
     grid-area: listcontent;

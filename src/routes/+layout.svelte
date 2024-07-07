@@ -8,7 +8,7 @@
   .outer-div {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     height: 100vh;
     width: 100vw;
     padding: 0;
