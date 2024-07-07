@@ -11,6 +11,7 @@
     height: 0;
     display: grid;
     justify-items: flex-end;
+    z-index: 10;
   }
   .go-button {
     font-family: 'Courier New', Courier, monospace;

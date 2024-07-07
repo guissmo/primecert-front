@@ -20,6 +20,7 @@
     display: flex;
     flex-shrink: 0;
     white-space: nowrap;
+    z-index: 5;
   }
   .label {
     font-size: 10rem;

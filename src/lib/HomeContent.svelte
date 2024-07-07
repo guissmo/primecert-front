@@ -37,13 +37,14 @@
     grid-template-areas:
       'aboutheader listheader'
       'aboutcontent listcontent';
+    overflow-y: scroll;
+    height: 100%;
   }
   .header-container {
     font-size: 2rem;
     padding: 1ex;
   }
   .header {
-    z-index: 3;
     font-family: 'Courier New', Courier, monospace;
     text-transform: uppercase;
     padding: 1ex;

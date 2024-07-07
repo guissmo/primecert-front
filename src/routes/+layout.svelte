@@ -20,5 +20,7 @@
     display: flex;
     justify-content: flex-start;
     flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
   }
 </style>
