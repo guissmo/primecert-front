@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { Writable } from 'svelte/store';
   import Aka from './Aka.svelte';
   import BigNumber from './BigNumber.svelte';
   import BigNumberDisplay from './BigNumberDisplay.svelte';
@@ -6,8 +7,15 @@
   import PrimeName from './PrimeName.svelte';
   import PrimeNavBar from './PrimeNavBar.svelte';
   import PrimePageContent from './PrimePageContent.svelte';
+  import { getContext } from 'svelte';
 
   export let errorDetails: IntegerErrorResponse | SlugErrorResponse | null | undefined;
+
+  // CONTEXT EXAMPLE
+  const myContext = getContext('currentPrime') as Writable<
+    IntegerErrorResponse | SlugErrorResponse
+  >;
+  // ^ NOT NEEDED ON THIS PAGE TBH
 
   const pageTexts = (function () {
     if (!errorDetails) {

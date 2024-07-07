@@ -16,6 +16,9 @@
   import PrimePageError from '$lib/PrimePageError.svelte';
   import BigNumberDisplay from '$lib/BigNumberDisplay.svelte';
 
+  import { setContext } from 'svelte';
+  import { writable } from 'svelte/store';
+
   type NamedPrime = {
     id: String;
     n: string;
@@ -38,7 +41,14 @@
   let result: GetPrimeInfoResponse | undefined | null;
   async function fetchData() {
     result = await getPrimeInfo($page.params.slug);
+    currentPrime.set(result);
   }
+
+  // CONTEXT
+  const currentPrime = writable();
+  $: currentPrime.set(result);
+  setContext('currentPrime', currentPrime);
+  // END CONTEXT
 
   function updateViewedNumber(s: string) {
     if (typeof primeInfoEntry == 'number') {
