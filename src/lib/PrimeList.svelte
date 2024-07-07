@@ -9,6 +9,16 @@
   async function fetchPrimeList() {
     return fetchGeneric(endpoint);
   }
+
+  function getPrimeHref(item: NamedPrimeEntry) {
+    return item.slug ? item.slug : item.n;
+  }
+
+  function getPrimeLabel(item: NamedPrimeEntry) {
+    return item.name
+      ? item.name
+      : item.n.substring(0, 5) + '...' + item.n.substring(item.n.length - 5);
+  }
 </script>
 
 <div class="prime-list" style={`width: ${width}`}>
@@ -18,7 +28,9 @@
   {:then data}
     {#each data as item}
       <p>
-        <LinkPrime name={item.name} slug={item.slug} />
+        <LinkPrime primeHref={getPrimeHref(item)}>
+          {getPrimeLabel(item)}
+        </LinkPrime>
       </p>
     {/each}
   {/await}

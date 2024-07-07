@@ -17,7 +17,7 @@
   <div class="outer-div">
     <div class="container-div">
       <div style="position: fixed">
-        <BigNumberNavigation input />
+        <BigNumberNavigation />
       </div>
       <div class="content">
         <div class="header-container about-header"><span class="header">About</span></div>

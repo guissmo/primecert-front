@@ -1,6 +1,5 @@
 <script>
-  export let name;
-  export let slug;
+  export let primeHref = '';
 
   const highlightColors = [
     '#ffadad',
@@ -16,8 +15,8 @@
   export let color = highlightColors[Math.floor(Math.random() * highlightColors.length)];
 </script>
 
-<a href={`/prime/${slug}`} class="clickable-prime" style={`--color: ${color}`}>
-  {name}
+<a href={`/prime/${primeHref}`} class="clickable-prime" style={`--color: ${color}`}>
+  <slot />
 </a>
 
 <style>
