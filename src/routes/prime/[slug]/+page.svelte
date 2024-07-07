@@ -13,6 +13,8 @@
   import { getPrimeInfo } from '$lib/fetch';
   import BigNumberNavigation from '$lib/BigNumberNavigation.svelte';
   import BigNumber from '$lib/BigNumber.svelte';
+  import PrimePageError from '$lib/PrimePageError.svelte';
+  import BigNumberDisplay from '$lib/BigNumberDisplay.svelte';
 
   type NamedPrime = {
     id: String;
@@ -185,16 +187,8 @@
     </span>
   </div>
 {:then}
-  {#if !result}
-    <BigNumber label="N=" />
-    <div class="info-div">
-      <span class="prime-info-container">
-        <Aka />
-        <PrimeName>there was an unexpected problem.</PrimeName>
-        <PrimeNavBar />
-        <PrimePageContent>Sad.</PrimePageContent>
-      </span>
-    </div>
+  {#if !result || !('id' in result)}
+    <PrimePageError errorDetails={result} />
   {:else if 'error' in result}
     <BigNumber label="N=" />
     <div class="info-div">
@@ -206,7 +200,9 @@
       </span>
     </div>
   {:else}
-    <BigNumber label={`N=${result.n}`} />
+    <BigNumberDisplay>
+      {result.n}
+    </BigNumberDisplay>
     <div class="info-div">
       <span class="prime-info-container">
         <Aka />

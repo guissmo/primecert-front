@@ -1,8 +1,9 @@
 <script lang="ts">
   export let label: string = 'N=';
+  export let allowScroll: boolean = false;
 </script>
 
-<div class="container">
+<div class="container" style={allowScroll ? 'overflow-x: scroll' : ''}>
   <span class="label">
     {label}<slot />
   </span>
