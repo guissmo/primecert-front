@@ -343,11 +343,6 @@
     max-width: 100vw;
     overflow-y: scroll;
   }
-  .theorem {
-    margin-top: 0;
-    margin-bottom: 24px;
-    line-height: 1.6;
-  }
   .prime-info-container {
     font-family: Georgia, Times, 'Times New Roman', serif;
     gap: 1rem;

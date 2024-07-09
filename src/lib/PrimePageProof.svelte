@@ -8,6 +8,7 @@
   import { getContext } from 'svelte';
   import PrimeInfoContainer from './PrimeInfoContainer.svelte';
   import PrimeName from './PrimeName.svelte';
+  import PrimeProofContent from './PrimeProofContent.svelte';
 
   const primeDetails = getContext('primeDetails') as Writable<PrimeInfoEntry>;
 </script>
@@ -21,5 +22,7 @@
     <PrimeName />
   </PrimePageHeader>
   <PrimeNavBar />
-  <PrimePageContent>Yay.</PrimePageContent>
+  <PrimePageContent>
+    <PrimeProofContent />
+  </PrimePageContent>
 </PrimeInfoContainer>
