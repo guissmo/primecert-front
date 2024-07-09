@@ -9,6 +9,7 @@ type NamedPrimeEntry = UnnamedPrimeEntry & {
 };
 
 type PrimeInfoEntry = {
+  [key: string]: any;
   id: string;
   name: string | null;
   slug: string | null;

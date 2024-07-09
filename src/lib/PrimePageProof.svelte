@@ -9,13 +9,9 @@
   import PrimeInfoContainer from './PrimeInfoContainer.svelte';
   import PrimeName from './PrimeName.svelte';
   import PrimeProofContent from './PrimeProofContent.svelte';
-
-  const primeDetails = getContext('primeDetails') as Writable<PrimeInfoEntry>;
 </script>
 
-<BigNumberDisplay>
-  {$primeDetails.n}
-</BigNumberDisplay>
+<BigNumberDisplay />
 <PrimeInfoContainer>
   <Aka />
   <PrimePageHeader>

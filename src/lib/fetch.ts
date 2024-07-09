@@ -4,7 +4,9 @@ import { PUBLIC_BASE_API_URL } from '$env/static/public';
 export async function getPrimeInfo(slug: string): Promise<GetPrimeInfoResponse | null> {
   return await fetch(`${PUBLIC_BASE_API_URL}/get-all-info/${slug}`)
     .then(async (response) => {
-      return JSONParse(await response.text()) as GetPrimeInfoResponse;
+      const res = await response.text();
+      console.log(res);
+      return JSONParse(res) as GetPrimeInfoResponse;
     })
     .then((data) => {
       // if data has error key return data

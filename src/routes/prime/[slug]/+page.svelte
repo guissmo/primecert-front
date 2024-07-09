@@ -14,7 +14,6 @@
   import BigNumberNavigation from '$lib/BigNumberNavigation.svelte';
   import BigNumber from '$lib/BigNumber.svelte';
   import PrimePageError from '$lib/PrimePageError.svelte';
-  import BigNumberDisplay from '$lib/BigNumberDisplay.svelte';
 
   import { setContext } from 'svelte';
   import { writable, type Writable } from 'svelte/store';
@@ -33,13 +32,22 @@
   let result: GetPrimeInfoResponse | undefined | null;
   async function fetchData() {
     result = await getPrimeInfo($page.params.slug);
-    if (result && 'id' in result) primeDetails.set(result);
+    if (result && 'id' in result) {
+      primeDetails.set(result);
+    }
   }
+
+  let viewedVariable = 'N';
 
   // CONTEXT
   const primeDetails: Writable<PrimeInfoEntry | null> = writable();
-  $: primeDetails.set(result && 'id' in result ? result : null);
   setContext('primeDetails', primeDetails);
+  $: primeDetails.set(result && 'id' in result ? result : null);
+
+  const viewedVariableContext: Writable<string> = writable();
+  setContext('viewedVariable', viewedVariableContext);
+  $: viewedVariableContext.set(viewedVariable);
+
   // END CONTEXT
 
   // function updateViewedNumber(s: string) {
@@ -145,10 +153,10 @@
     // );
   }
 
-  onMount(loadPrime);
+  onMount(fetchData);
 </script>
 
-{#await fetchData()}
+{#if result == undefined}
   <BigNumber />
   <div class="info-div">
     <span class="prime-info-container">
@@ -158,181 +166,11 @@
       <PrimePageContent>Hmm.</PrimePageContent>
     </span>
   </div>
-{:then}
-  {#if !result || !('id' in result)}
-    <PrimePageError errorDetails={result} />
-  {:else}
-    <PrimePageProof />
-  {/if}
-{/await}
-
-<!-- <div class="outer-div">
-  <div class="container-div">
-    <div class="big-number-container">
-      <span class="big-number">
-        {variableName + '='}{typeof primeInfoEntry == 'object'
-          ? viewedNumber == BigInt(0)
-            ? ''
-            : st(viewedNumber)
-          : Ndisplay}
-      </span>
-    </div>
-    {#if Ndisplay == errorString}
-      <div class="info-div">
-        <span class="prime-info-container">
-          <Aka />
-          <PrimePageHeader>there was a problem.</PrimePageHeader>
-          <PrimeNavBar />
-          <PrimePageContent>Sad.</PrimePageContent>
-        </span>
-      </div>
-    {/if}
-    {#if typeof primeInfoEntry == 'number'}
-      <div class="info-div">
-        <img
-          class="img-avatar"
-          alt="a robot"
-          src={`https://robohash.org/${primeInfoEntry.toString(10)}?set=set4`}
-        />
-        <span class="prime-info-container">
-          <Aka />
-          <span class="prime-name"
-            ><Hoverable
-              displayed={variableName == 'N'}
-              locked={true}
-              char="N"
-              onClick={() => {}}
-              onMouseEnter={() => {}}
-              onMouseLeave={() => {}}
-            /> is {isSmallPrime ? 'prime' : 'not prime'}.</span
-          >
-          <PrimeNavBar />
-          <span class="info"> Isn't that interesting? </span>
-        </span>
-      </div>
-    {/if}
-    {#if primeInfoEntry && typeof primeInfoEntry == 'object'}
-      <div class="info-div">
-        <img
-          class="img-avatar"
-          alt="a robot"
-          src={`https://robohash.org/${st(primeInfoEntry.n)}?set=set4`}
-        />
-        <span class="prime-info-container">
-          <Aka />
-          {#if primeInfoEntry.name}
-            <span class="prime-name">{primeInfoEntry.name}</span>
-          {/if}
-          {#if !primeInfoEntry.name}
-            <form
-              action={`${PUBLIC_BASE_API_URL}/claim-prime/${primeInfoEntry.id}`}
-              on:submit|preventDefault={handleSubmit}
-            >
-              <input
-                name="name"
-                class="prime-name-input"
-                placeholder="An Unnamed Prime"
-                minlength="4"
-              />
-              <button class="name-it" type="submit">Name It</button>
-            </form>
-          {/if}
-          <PrimeNavBar />
-          <span class="info">
-            <p class="theorem">
-              The point P: ( <Hoverable
-                displayed={variableName == 'x'}
-                locked={lockedVariableName && variableName == 'x'}
-                char="x"
-                onClick={() => toggleLockVariableName('x')}
-                onMouseEnter={() => viewedVariableName('x')}
-                onMouseLeave={() => restorePreviousVariableName()}
-              />, <Hoverable
-                displayed={variableName == 'y'}
-                locked={lockedVariableName && variableName == 'y'}
-                char="y"
-                onClick={() => toggleLockVariableName('y')}
-                onMouseEnter={() => viewedVariableName('y')}
-                onMouseLeave={() => restorePreviousVariableName()}
-              /> ) on the elliptic curve
-              <br />&nbsp;&nbsp; E: y<sup>2</sup> = x<sup>3</sup> + <Hoverable
-                displayed={variableName == 'a'}
-                locked={lockedVariableName && variableName == 'a'}
-                char="a"
-                onClick={() => toggleLockVariableName('a')}
-                onMouseEnter={() => viewedVariableName('a')}
-                onMouseLeave={() => restorePreviousVariableName()}
-              />x + <Hoverable
-                displayed={variableName == 'b'}
-                locked={lockedVariableName && variableName == 'b'}
-                char="b"
-                onClick={() => toggleLockVariableName('b')}
-                onMouseEnter={() => viewedVariableName('b')}
-                onMouseLeave={() => restorePreviousVariableName()}
-              />, &nbsp;&nbsp; defined modulo <Hoverable
-                displayed={variableName == 'N'}
-                locked={lockedVariableName && variableName == 'N'}
-                char="N"
-                onClick={() => toggleLockVariableName('N')}
-                onMouseEnter={() => viewedVariableName('N')}
-                onMouseLeave={() => restorePreviousVariableName()}
-              />
-              <br />has order <Hoverable
-                displayed={variableName == 'q'}
-                locked={lockedVariableName && variableName == 'q'}
-                char="q"
-                onClick={() => toggleLockVariableName('q')}
-                onMouseEnter={() => viewedVariableName('q')}
-                onMouseLeave={() => restorePreviousVariableName()}
-              /> &gt; (N<sup>1/4</sup> + 1)<sup>2</sup>.
-            </p>
-            <p class="theorem">
-              Since <Hoverable
-                displayed={variableName == 'q'}
-                locked={lockedVariableName && variableName == 'q'}
-                char="q"
-                onClick={() => toggleLockVariableName('q')}
-                onMouseEnter={() => viewedVariableName('q')}
-                onMouseLeave={() => restorePreviousVariableName()}
-              />
-              {#if lowQ}
-                <span
-                  >is prime because it is less than 2<sup>64</sup> and is a pseudoprime according to
-                  <a
-                    class="proof-link"
-                    href="https://en.wikipedia.org/wiki/Baillie%E2%80%93PSW_primality_test"
-                    target="_blank">the Baillie–PSW test</a
-                  >,</span
-                >
-              {:else}
-                <span
-                  ><a
-                    class="proof-link"
-                    on:mouseenter={() => viewedVariableName('q')}
-                    on:mouseleave={() => restorePreviousVariableName()}
-                    href={primeInfoEntry && primeInfoEntry.q
-                      ? `/prime/${st(primeInfoEntry.q)}`
-                      : './'}
-                    data-sveltekit-reload>is prime</a
-                  >,</span
-                >
-              {/if} then <Hoverable
-                displayed={variableName == 'N'}
-                locked={lockedVariableName && variableName == 'N'}
-                char="N"
-                onClick={() => toggleLockVariableName('N')}
-                onMouseEnter={() => viewedVariableName('N')}
-                onMouseLeave={() => restorePreviousVariableName()}
-              /> is also prime.
-            </p>
-          </span>
-        </span>
-      </div>
-    {:else}
-      <div class="info-div">&nbsp;</div>
-    {/if}
-  </div>
-</div> -->
+{:else if result == null || !('id' in result)}
+  <PrimePageError errorDetails={result} />
+{:else}
+  <PrimePageProof />
+{/if}
 
 <style>
   .info-div {

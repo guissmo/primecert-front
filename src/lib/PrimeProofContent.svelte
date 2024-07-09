@@ -1,5 +1,11 @@
 <script lang="ts">
+  import { setContext } from 'svelte';
   import Var from './ProofVar.svelte';
+  import { writable, type Writable } from 'svelte/store';
+
+  const lockedVariable: Writable<string> = writable();
+  setContext('lockedVariable', lockedVariable);
+  $: lockedVariable.set('N');
 </script>
 
 <span class="info">
