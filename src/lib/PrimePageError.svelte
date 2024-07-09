@@ -4,18 +4,12 @@
   import BigNumber from './BigNumber.svelte';
   import BigNumberDisplay from './BigNumberDisplay.svelte';
   import PrimeInfoContainer from './PrimeInfoContainer.svelte';
-  import PrimeName from './PrimeName.svelte';
+  import PrimeName from './PrimePageHeader.svelte';
   import PrimeNavBar from './PrimeNavBar.svelte';
   import PrimePageContent from './PrimePageContent.svelte';
   import { getContext } from 'svelte';
 
   export let errorDetails: IntegerErrorResponse | SlugErrorResponse | null | undefined;
-
-  // CONTEXT EXAMPLE
-  const myContext = getContext('currentPrime') as Writable<
-    IntegerErrorResponse | SlugErrorResponse
-  >;
-  // ^ NOT NEEDED ON THIS PAGE TBH
 
   const pageTexts = (function () {
     if (!errorDetails) {

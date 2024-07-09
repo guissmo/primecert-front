@@ -7,7 +7,7 @@
   import Hoverable from '$lib/Hoverable.svelte';
   import { PUBLIC_BASE_API_URL } from '$env/static/public';
   import PrimeNavBar from '$lib/PrimeNavBar.svelte';
-  import PrimeName from '$lib/PrimeName.svelte';
+  import PrimePageHeader from '$lib/PrimePageHeader.svelte';
   import Aka from '$lib/Aka.svelte';
   import PrimePageContent from '$lib/PrimePageContent.svelte';
   import { getPrimeInfo } from '$lib/fetch';
@@ -17,173 +17,135 @@
   import BigNumberDisplay from '$lib/BigNumberDisplay.svelte';
 
   import { setContext } from 'svelte';
-  import { writable } from 'svelte/store';
-
-  type NamedPrime = {
-    id: String;
-    n: string;
-    name: string;
-    slug: string;
-  };
-
-  let recentlyNamed: NamedPrime[] = [];
+  import { writable, type Writable } from 'svelte/store';
+  import PrimePageProof from '$lib/PrimePageProof.svelte';
 
   let primeInfoEntry: GetPrimeInfoResponse;
   let primeInfoResponse: GetPrimeInfoResponse | undefined | null;
 
-  let lockedVariableName = true;
-  let previousVariableName = 'N';
-  let variableName = 'N';
-  let viewedNumber: bigint | undefined = 0n;
+  // let lockedVariableName = true;
+  // let previousVariableName = 'N';
+  // let variableName = 'N';
+  // let viewedNumber: bigint | undefined = 0n;
 
-  let lowQ = false;
+  // let lowQ = false;
 
   let result: GetPrimeInfoResponse | undefined | null;
   async function fetchData() {
     result = await getPrimeInfo($page.params.slug);
-    currentPrime.set(result);
+    if (result && 'id' in result) primeDetails.set(result);
   }
 
   // CONTEXT
-  const currentPrime = writable();
-  $: currentPrime.set(result);
-  setContext('currentPrime', currentPrime);
+  const primeDetails: Writable<PrimeInfoEntry | null> = writable();
+  $: primeDetails.set(result && 'id' in result ? result : null);
+  setContext('primeDetails', primeDetails);
   // END CONTEXT
 
-  function updateViewedNumber(s: string) {
-    if (typeof primeInfoEntry == 'number') {
-      return;
-    }
-    switch (s) {
-      case 'N':
-        viewedNumber = primeInfoEntry?.n;
-        break;
-      case 'q':
-        viewedNumber = primeInfoEntry?.q;
-        break;
-      case 'x':
-        viewedNumber = primeInfoEntry?.x;
-        break;
-      case 'y':
-        viewedNumber = primeInfoEntry?.y;
-        break;
-      case 'a':
-        viewedNumber = primeInfoEntry?.a;
-        break;
-      case 'b':
-        viewedNumber = primeInfoEntry?.b;
-        break;
-    }
-  }
+  // function updateViewedNumber(s: string) {
+  //   if (typeof primeInfoEntry == 'number') {
+  //     return;
+  //   }
+  //   switch (s) {
+  //     case 'N':
+  //       viewedNumber = primeInfoEntry?.n;
+  //       break;
+  //     case 'q':
+  //       viewedNumber = primeInfoEntry?.q;
+  //       break;
+  //     case 'x':
+  //       viewedNumber = primeInfoEntry?.x;
+  //       break;
+  //     case 'y':
+  //       viewedNumber = primeInfoEntry?.y;
+  //       break;
+  //     case 'a':
+  //       viewedNumber = primeInfoEntry?.a;
+  //       break;
+  //     case 'b':
+  //       viewedNumber = primeInfoEntry?.b;
+  //       break;
+  //   }
+  // }
 
-  function viewedVariableName(s: string) {
-    if (lockedVariableName) {
-      return;
-    }
-    previousVariableName = variableName;
-    variableName = s;
-    updateViewedNumber(s);
-  }
+  // function viewedVariableName(s: string) {
+  //   if (lockedVariableName) {
+  //     return;
+  //   }
+  //   previousVariableName = variableName;
+  //   variableName = s;
+  //   updateViewedNumber(s);
+  // }
 
-  function restorePreviousVariableName() {
-    if (lockedVariableName) {
-      return;
-    }
-    variableName = previousVariableName;
-    updateViewedNumber(previousVariableName);
-  }
+  // function restorePreviousVariableName() {
+  //   if (lockedVariableName) {
+  //     return;
+  //   }
+  //   variableName = previousVariableName;
+  //   updateViewedNumber(previousVariableName);
+  // }
 
-  function toggleLockVariableName(s: string) {
-    if (!lockedVariableName) lockedVariableName = true;
-    else {
-      lockedVariableName = s != variableName;
-      if (!lockedVariableName) {
-        previousVariableName = 'N';
-        return;
-      }
-    }
-    previousVariableName = variableName;
-    variableName = s;
-    updateViewedNumber(s);
-  }
+  // function toggleLockVariableName(s: string) {
+  //   if (!lockedVariableName) lockedVariableName = true;
+  //   else {
+  //     lockedVariableName = s != variableName;
+  //     if (!lockedVariableName) {
+  //       previousVariableName = 'N';
+  //       return;
+  //     }
+  //   }
+  //   previousVariableName = variableName;
+  //   variableName = s;
+  //   updateViewedNumber(s);
+  // }
 
-  function st(x: BigInt | undefined) {
-    if (x == undefined) {
-      return '...';
-    }
-    return x.toString(10);
-  }
+  // function st(x: BigInt | undefined) {
+  //   if (x == undefined) {
+  //     return '...';
+  //   }
+  //   return x.toString(10);
+  // }
 
-  let Ndisplay = '...';
-  const errorString = '?!?!!';
+  // let Ndisplay = '...';
+  // const errorString = '?!?!!';
 
-  let isSmallPrime = false;
-
-  async function loadPrime() {
+  export async function loadPrime() {
     primeInfoResponse = await getPrimeInfo($page.params.slug);
 
+    // Update primeInfoResponse
     if (primeInfoResponse) {
       primeInfoEntry = primeInfoResponse;
-    } else {
-      primeInfoEntry = null;
     }
 
-    Ndisplay = (function () {
-      console.log(primeInfoEntry);
-      if (primeInfoEntry && typeof primeInfoEntry == 'object') {
-        return st(primeInfoEntry.n);
-      }
-      if (typeof primeInfoEntry == 'number') {
-        isSmallPrime = Boolean(primeInfoEntry);
-        return $page.params.slug;
-      }
-      return errorString;
-      //    currentPrime ? st(currentPrime.n) : currentPrime == null ? Number.isNaN(Number($page.params.slug)) || !Number.isInteger(Number($page.params.slug)) ? 'NaN' : ($page.params.slug) : '...'
-    })();
-    if (primeInfoEntry == null) {
-      return;
-    }
-    viewedNumber =
-      primeInfoEntry && typeof primeInfoEntry != 'number' ? primeInfoEntry.n : undefined;
-    lowQ = Boolean(
-      primeInfoEntry &&
-        typeof primeInfoEntry != 'number' &&
-        primeInfoEntry.q &&
-        primeInfoEntry.q < 18446744073709551616n,
-    );
+    // Ndisplay?
+    // Ndisplay = (function () {
+    //   console.log(primeInfoEntry);
+    //   if (primeInfoEntry && typeof primeInfoEntry == 'object') {
+    //     return st(primeInfoEntry.n);
+    //   }
+    //   if (typeof primeInfoEntry == 'number') {
+    //     isSmallPrime = Boolean(primeInfoEntry);
+    //     return $page.params.slug;
+    //   }
+    //   return errorString;
+    //   //    currentPrime ? st(currentPrime.n) : currentPrime == null ? Number.isNaN(Number($page.params.slug)) || !Number.isInteger(Number($page.params.slug)) ? 'NaN' : ($page.params.slug) : '...'
+    // })();
+
+    // // bigInputLogic
+    // if (primeInfoEntry == null) {
+    //   return;
+    // }
+    // viewedNumber =
+    //   primeInfoEntry && typeof primeInfoEntry != 'number' ? primeInfoEntry.n : undefined;
+    // lowQ = Boolean(
+    //   primeInfoEntry &&
+    //     typeof primeInfoEntry != 'number' &&
+    //     primeInfoEntry.q &&
+    //     primeInfoEntry.q < 18446744073709551616n,
+    // );
   }
 
   onMount(loadPrime);
-
-  async function handleSubmit(e: SubmitEvent) {
-    const target = e.target as HTMLFormElement;
-    const ACTION_URL = new URL(target.action);
-
-    const formData = new FormData(target);
-    const data = new URLSearchParams();
-    let name = '';
-    for (let [key, value] of formData) {
-      if (key === 'name') {
-        name = value as string;
-      }
-    }
-
-    const slug = name.toLowerCase().replaceAll(' ', '-');
-
-    const queryParams = new URLSearchParams(formData as any);
-    queryParams.append('slug', slug);
-
-    ACTION_URL.search = queryParams.toString();
-
-    console.log(data);
-    console.log(formData);
-
-    const response = await fetch(ACTION_URL, {
-      method: 'POST',
-    });
-    console.log(response);
-    await loadPrime();
-  }
 </script>
 
 {#await fetchData()}
@@ -191,7 +153,7 @@
   <div class="info-div">
     <span class="prime-info-container">
       <Aka />
-      <PrimeName>loading.</PrimeName>
+      <PrimePageHeader>loading.</PrimePageHeader>
       <PrimeNavBar />
       <PrimePageContent>Hmm.</PrimePageContent>
     </span>
@@ -199,45 +161,8 @@
 {:then}
   {#if !result || !('id' in result)}
     <PrimePageError errorDetails={result} />
-  {:else if 'error' in result}
-    <BigNumber label="N=" />
-    <div class="info-div">
-      <span class="prime-info-container">
-        <Aka />
-        <PrimeName>{result['error']}</PrimeName>
-        <PrimeNavBar />
-        <PrimePageContent>Sad.</PrimePageContent>
-      </span>
-    </div>
   {:else}
-    <BigNumberDisplay>
-      {result.n}
-    </BigNumberDisplay>
-    <div class="info-div">
-      <span class="prime-info-container">
-        <Aka />
-        {#if result.name}
-          <PrimeName>{result.name}</PrimeName>
-        {:else}
-          <PrimeName>
-            <form
-              action={`${PUBLIC_BASE_API_URL}/claim-prime/${result.id}`}
-              on:submit|preventDefault={handleSubmit}
-            >
-              <input
-                name="name"
-                class="prime-name-input"
-                placeholder="An Unnamed Prime"
-                minlength="4"
-              />
-              <button class="name-it" type="submit">Name It</button>
-            </form>
-          </PrimeName>
-        {/if}
-        <PrimeNavBar />
-        <PrimePageContent>Yay.</PrimePageContent>
-      </span>
-    </div>
+    <PrimePageProof />
   {/if}
 {/await}
 
@@ -256,7 +181,7 @@
       <div class="info-div">
         <span class="prime-info-container">
           <Aka />
-          <PrimeName>there was a problem.</PrimeName>
+          <PrimePageHeader>there was a problem.</PrimePageHeader>
           <PrimeNavBar />
           <PrimePageContent>Sad.</PrimePageContent>
         </span>
@@ -432,29 +357,6 @@
     grid-template-areas:
       'aka prime-name'
       'nav-bar info';
-  }
-  .prime-name-input {
-    font-size: 5rem;
-    font-weight: 900;
-    font-family: Georgia, Times, 'Times New Roman', serif;
-    border: none;
-    outline: none;
-    box-shadow: 0px 5px 10px darkgray;
-    padding: 10px;
-    width: 50rem;
-    z-index: 2;
-  }
-  .name-it {
-    font-size: 3rem;
-    font-weight: 900;
-    font-family: 'Courier New', Courier, monospace;
-    text-transform: uppercase;
-    border: none;
-    outline: none;
-    box-shadow: 0px 5px 10px darkgray;
-    padding: 10px;
-    margin-left: 2rem;
-    background: white;
   }
   .proof-link {
     color: black;
