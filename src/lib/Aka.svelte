@@ -1,4 +1,7 @@
 <script lang="ts">
+  import { getContext } from 'svelte';
+  import type { Writable } from 'svelte/store';
+
   export let visible = true;
 </script>
 

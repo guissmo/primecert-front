@@ -1,11 +1,15 @@
 <script lang="ts">
-  import { setContext } from 'svelte';
+  import { setContext, getContext } from 'svelte';
   import Var from './ProofVar.svelte';
   import { writable, type Writable } from 'svelte/store';
 
   const lockedVariable: Writable<string> = writable();
   setContext('lockedVariable', lockedVariable);
   $: lockedVariable.set('N');
+
+  const primeDetails = getContext('primeDetails') as Writable<PrimeInfoEntry>;
+  let proofLink = '#';
+  $: proofLink = `/prime/${$primeDetails.q}`;
 </script>
 
 <span class="info">
@@ -17,7 +21,7 @@
   </p>
   <p class="theorem">
     Since <Var name="q" />
-    <span><a class="proof-link" href="#" data-sveltekit-reload>is prime</a>,</span>
+    <span><a class="proof-link" href={proofLink} data-sveltekit-reload>is prime</a>,</span>
     then <Var name="N" /> is also prime.
   </p>
 </span>

@@ -49,9 +49,7 @@
   })();
 </script>
 
-<BigNumberDisplay>
-  {pageTexts.bigLabel}
-</BigNumberDisplay>
+<BigNumberDisplay label={pageTexts.bigLabel} />
 <PrimeInfoContainer>
   <Aka />
   <PrimeName>{pageTexts.header}</PrimeName>

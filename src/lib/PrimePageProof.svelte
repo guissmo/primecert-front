@@ -9,11 +9,14 @@
   import PrimeInfoContainer from './PrimeInfoContainer.svelte';
   import PrimeName from './PrimeName.svelte';
   import PrimeProofContent from './PrimeProofContent.svelte';
+
+  const viewedVariable = getContext('viewedVariable') as Writable<string>;
+  $: visibleHeader = $viewedVariable == 'N';
 </script>
 
 <BigNumberDisplay />
 <PrimeInfoContainer>
-  <Aka />
+  <Aka visible={visibleHeader} />
   <PrimePageHeader>
     <PrimeName />
   </PrimePageHeader>
