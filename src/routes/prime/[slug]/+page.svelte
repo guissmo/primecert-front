@@ -56,7 +56,7 @@
   onMount(fetchData);
 </script>
 
-{#if result == undefined || true}
+{#if result == undefined}
   <BigNumber />
   <PrimeInfoContainer>
     <Aka />

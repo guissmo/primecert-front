@@ -29,7 +29,6 @@
   },
   "type": "module",
   "dependencies": {
-    "json-with-bigint": "^2.1.2",
-    "svelte-gestures": "^5.0.1"
+    "json-with-bigint": "^2.1.2"
   }
 }

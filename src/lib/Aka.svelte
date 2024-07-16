@@ -18,6 +18,7 @@
     .aka {
       font-size: 3rem;
       text-align: center;
+      width: 90vw;
     }
   }
 </style>
