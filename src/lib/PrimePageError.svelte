@@ -8,6 +8,7 @@
   import PrimeNavBar from './PrimeNavBar.svelte';
   import PrimePageContent from './PrimePageContent.svelte';
   import { getContext } from 'svelte';
+  import { error } from '@sveltejs/kit';
 
   export let errorDetails: IntegerErrorResponse | SlugErrorResponse | null | undefined;
 
@@ -54,5 +55,15 @@
   <Aka />
   <PrimeName>{pageTexts.header}</PrimeName>
   <PrimeNavBar />
-  <PrimePageContent>Yay.</PrimePageContent>
+  {#if !errorDetails}
+    <PrimePageContent>Boo.</PrimePageContent>
+  {:else if errorDetails.error == 'NOT_FOUND'}
+    <PrimePageContent>What?</PrimePageContent>
+  {:else if errorDetails.error == 'COMPOSITE'}
+    <PrimePageContent>It's divisible by a prime that is less than itself!</PrimePageContent>
+  {:else if errorDetails.error == 'LOW_PRIME'}
+    <PrimePageContent>
+      It is an integer less than 2<sup>64</sup> and it passes the Baillie–PSW primality test!
+    </PrimePageContent>
+  {/if}
 </PrimeInfoContainer>

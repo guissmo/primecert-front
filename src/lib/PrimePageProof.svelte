@@ -10,6 +10,10 @@
   import PrimeName from './PrimeName.svelte';
   import PrimeProofContent from './PrimeProofContent.svelte';
 
+  let cat: string | undefined = undefined;
+
+  const primeDetails = getContext('primeDetails') as Writable<PrimeInfoEntry>;
+  $: cat = $primeDetails && $primeDetails.n ? String($primeDetails.n) : undefined;
   const viewedVariable = getContext('viewedVariable') as Writable<string>;
   $: visibleHeader = $viewedVariable == 'N';
 </script>
@@ -21,7 +25,7 @@
     <PrimeName />
   </PrimePageHeader>
   <PrimeNavBar />
-  <PrimePageContent>
+  <PrimePageContent s={cat}>
     <PrimeProofContent />
   </PrimePageContent>
 </PrimeInfoContainer>

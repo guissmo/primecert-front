@@ -89,11 +89,4 @@
       'aka prime-name'
       'nav-bar info';
   }
-  .img-avatar {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 128px;
-    z-index: 2;
-  }
 </style>
