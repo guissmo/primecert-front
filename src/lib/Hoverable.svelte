@@ -1,10 +1,13 @@
 <script lang="ts">
+  import { tap } from 'svelte-gestures';
+
   export let char: string = '';
   export let locked = false;
   export let displayed = false;
-  export let onClick: () => void = () => {};
+  export let onClick: (event?: MouseEvent) => void = () => {};
   export let onMouseEnter: () => void = () => {};
   export let onMouseLeave: () => void = () => {};
+  export let onTouchStart: () => void = () => {};
   let color = '#FFFF';
   switch (char.toLowerCase()) {
     case 'n':
@@ -35,7 +38,8 @@
   data-displayed={displayed ? 'yes' : 'no'}
   href="#"
   style={`--color: ${color}`}
-  on:click={onClick}
+  on:click|preventDefault={onClick}
+  on:touchstart={onTouchStart}
   on:mouseenter={onMouseEnter}
   on:mouseleave={onMouseLeave}
   aria-label={char}
@@ -61,5 +65,10 @@
     background-color: var(--color);
     color: black;
     border-color: black;
+  }
+  @media (orientation: portrait) or (max-width: 900px) {
+    .hoverable[data-locked='yes'] {
+      border-color: transparent;
+    }
   }
 </style>

@@ -33,4 +33,10 @@
   .go-button:hover {
     box-shadow: 0px 5px 10px #666;
   }
+
+  @media (orientation: portrait) or (max-width: 900px) {
+    .go-button {
+      font-size: 1rem;
+    }
+  }
 </style>

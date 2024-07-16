@@ -38,6 +38,7 @@
 {:else}
   <PrimePageHeader>
     <form
+      class="name-it-form"
       action={`${PUBLIC_BASE_API_URL}/claim-prime/${$primeDetails.id}`}
       on:submit|preventDefault={handleSubmit}
     >
@@ -69,5 +70,19 @@
     padding: 5px;
     margin-left: 2rem;
     background: white;
+  }
+  @media (orientation: portrait) or (max-width: 900px) {
+    .prime-name-input {
+      width: 100%;
+    }
+    .name-it {
+      font-size: 1rem;
+      margin-left: 1rem;
+      margin-top: 0px;
+      padding-top: 0px;
+    }
+    .name-it-form {
+      font-size: 2.5rem;
+    }
   }
 </style>

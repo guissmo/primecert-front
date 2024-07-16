@@ -13,4 +13,11 @@
     opacity: 0.5;
     grid-area: aka;
   }
+
+  @media (orientation: portrait) or (max-width: 900px) {
+    .aka {
+      font-size: 3rem;
+      text-align: center;
+    }
+  }
 </style>

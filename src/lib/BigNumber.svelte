@@ -26,4 +26,12 @@
     font-size: 10rem;
     flex-grow: 1;
   }
+  @media (orientation: portrait) or (max-width: 900px) {
+    .container {
+      padding-top: 0;
+    }
+    .label {
+      font-size: 4rem;
+    }
+  }
 </style>

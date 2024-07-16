@@ -12,4 +12,13 @@
     text-overflow: ellipsis;
     padding-bottom: 10px;
   }
+
+  @media (orientation: portrait) or (max-width: 900px) {
+    .prime-name {
+      font-size: 4rem;
+      white-space: inherit;
+      text-overflow: none;
+      text-align: center;
+    }
+  }
 </style>

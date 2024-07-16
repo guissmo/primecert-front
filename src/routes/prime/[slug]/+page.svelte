@@ -18,6 +18,8 @@
   import { setContext } from 'svelte';
   import { writable, type Writable } from 'svelte/store';
   import PrimePageProof from '$lib/PrimePageProof.svelte';
+  import PrimeInfoContainer from '$lib/PrimeInfoContainer.svelte';
+  import LoadingText from '$lib/LoadingText.svelte';
 
   let primeInfoEntry: GetPrimeInfoResponse;
   let primeInfoResponse: GetPrimeInfoResponse | undefined | null;
@@ -54,16 +56,18 @@
   onMount(fetchData);
 </script>
 
-{#if result == undefined}
+{#if result == undefined || true}
   <BigNumber />
-  <div class="info-div">
-    <span class="prime-info-container">
-      <Aka />
-      <PrimePageHeader>loading.</PrimePageHeader>
-      <PrimeNavBar />
-      <PrimePageContent>Hmm.</PrimePageContent>
-    </span>
-  </div>
+  <PrimeInfoContainer>
+    <Aka />
+    <PrimePageHeader><LoadingText /></PrimePageHeader>
+    <PrimeNavBar />
+    <PrimePageContent>
+      <LoadingText /><br />
+      <LoadingText /><br />
+      <LoadingText />
+    </PrimePageContent>
+  </PrimeInfoContainer>
 {:else if result == null || !('id' in result)}
   <PrimePageError errorDetails={result} />
 {:else}
@@ -71,22 +75,4 @@
 {/if}
 
 <style>
-  .info-div {
-    flex-grow: 1;
-    padding-left: 10ex;
-    padding-right: 10ex;
-    padding-top: 5ex;
-    max-width: 100vw;
-    overflow-y: scroll;
-  }
-  .prime-info-container {
-    font-family: Georgia, Times, 'Times New Roman', serif;
-    gap: 1rem;
-    display: grid;
-    justify-content: flex-start;
-    align-items: baseline;
-    grid-template-areas:
-      'aka prime-name'
-      'nav-bar info';
-  }
 </style>

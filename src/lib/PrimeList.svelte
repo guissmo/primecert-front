@@ -1,5 +1,6 @@
 <script lang="ts">
   import LinkPrime from './LinkPrime.svelte';
+  import LoadingText from './LoadingText.svelte';
   import { fetchPrimeGeneric } from './fetch';
   export let title: string;
   export let endpoint: string;
@@ -23,7 +24,11 @@
 <div class="prime-list" style={`width: ${width}`}>
   <h3>{title}</h3>
   {#await fetchPrimeList()}
-    <div>Loading...</div>
+    {#each [1, 2, 3, 4, 5] as item}
+      <p>
+        <LinkPrime primeHref={'#'}><LoadingText /></LinkPrime>
+      </p>
+    {/each}
   {:then data}
     {#each data as item}
       <p>

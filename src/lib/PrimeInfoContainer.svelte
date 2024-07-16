@@ -23,4 +23,20 @@
       'aka prime-name'
       'nav-bar info';
   }
+  @media (orientation: portrait) or (max-width: 900px) {
+    .outer-container {
+      padding: 1ex;
+    }
+    .container {
+      gap: 0;
+      width: 100%;
+      align-items: center;
+      justify-content: center;
+      grid-template-areas:
+        'aka'
+        'prime-name'
+        'info'
+        'nav-bar';
+    }
+  }
 </style>

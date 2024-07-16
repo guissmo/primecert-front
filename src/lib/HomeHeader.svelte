@@ -18,4 +18,10 @@
     color: black;
     box-shadow: 0px 5px 10px darkgray;
   }
+
+  @media (orientation: portrait) or (max-width: 900px) {
+    .header {
+      font-size: 1rem;
+    }
+  }
 </style>

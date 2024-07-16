@@ -21,4 +21,9 @@
     width: 128px;
     z-index: 2;
   }
+  @media (orientation: portrait) or (max-width: 900px) {
+    .info {
+      font-size: 2rem;
+    }
+  }
 </style>

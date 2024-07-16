@@ -22,7 +22,7 @@
     </p>
   </div>
   <div class="header-container list-container">
-    <HomeHeader title="List" />
+    <HomeHeader title="Lists" />
   </div>
   <div class="sub-content list-content">
     <PrimeList title="Recently Named" endpoint="recently-named" />
@@ -73,5 +73,21 @@
   }
   .list-content {
     grid-area: listcontent;
+  }
+  @media (orientation: portrait) or (max-width: 900px) {
+    .home-grid {
+      display: block;
+    }
+    .about-content {
+      font-size: 2rem;
+      height: fit-content;
+    }
+    .sub-content {
+      font-size: 1rem;
+    }
+    .list-content {
+      display: flex;
+      flex-direction: column;
+    }
   }
 </style>

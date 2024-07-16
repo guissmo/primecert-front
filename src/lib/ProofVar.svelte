@@ -15,12 +15,15 @@
   displayed={$viewedVariable == name}
   locked={$lockedVariable == name}
   char={name}
-  onClick={() => {
+  onClick={(event) => {
     if ($lockedVariable != name) {
       lockedVariable.set(name);
     } else {
       lockedVariable.set('N');
     }
+  }}
+  onTouchStart={() => {
+    viewedVariable.set(name);
   }}
   onMouseEnter={() => {
     viewedVariable.set(name);
