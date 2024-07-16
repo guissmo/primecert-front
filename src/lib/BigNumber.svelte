@@ -5,13 +5,12 @@
 
 <div class="container" style={allowScroll ? 'overflow-x: scroll' : ''}>
   <span class="label">
-    {label}<slot />
+    <span>{label}</span><slot />
   </span>
 </div>
 
 <style>
   .container {
-    width: 100%;
     font-family: 'Courier New', Courier, monospace;
     background-color: white;
     color: black;
@@ -25,5 +24,6 @@
   }
   .label {
     font-size: 10rem;
+    flex-grow: 1;
   }
 </style>
