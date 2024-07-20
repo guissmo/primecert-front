@@ -14,7 +14,7 @@
     z-index: 10;
   }
   .go-button {
-    font-family: 'Courier New', Courier, monospace;
+    font-family: 'Source Code Pro', 'Courier New', Courier, monospace;
     text-transform: uppercase;
     text-decoration: none;
     padding: 1ex;

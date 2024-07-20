@@ -47,7 +47,7 @@
 
 <style>
   .hoverable {
-    font-family: 'Courier New', Courier, monospace;
+    font-family: 'Source Code Pro', 'Courier New', Courier, monospace;
     display: inline-block;
     padding: 0 0.5ex;
     color: black;

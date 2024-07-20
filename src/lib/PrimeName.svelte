@@ -70,7 +70,7 @@
   .name-it {
     font-size: 3rem;
     font-weight: 900;
-    font-family: 'Courier New', Courier, monospace;
+    font-family: 'Source Code Pro', 'Courier New', Courier, monospace;
     text-transform: uppercase;
     border: none;
     outline: none;
@@ -80,7 +80,7 @@
     background: white;
   }
   .link {
-    font-family: 'Courier New', Courier, monospace;
+    font-family: 'Source Code Pro', 'Courier New', Courier, monospace;
     font-weight: 900;
     font-size: 1rem;
     background: white;

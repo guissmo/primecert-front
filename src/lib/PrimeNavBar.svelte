@@ -20,7 +20,7 @@
     gap: 1em;
   }
   .link {
-    font-family: 'Courier New', Courier, monospace;
+    font-family: 'Source Code Pro', 'Courier New', Courier, monospace;
     font-weight: 900;
     font-size: 1rem;
     background: white;

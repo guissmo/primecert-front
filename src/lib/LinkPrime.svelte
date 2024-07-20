@@ -22,7 +22,7 @@
 <style>
   .clickable-prime {
     display: inline-block;
-    font-family: 'Courier New', Courier, monospace;
+    font-family: 'Source Code Pro', 'Courier New', Courier, monospace;
     text-decoration: none;
     padding: 0 1ex;
     color: black;

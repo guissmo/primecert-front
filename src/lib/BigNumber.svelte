@@ -11,7 +11,7 @@
 
 <style>
   .container {
-    font-family: 'Courier New', Courier, monospace;
+    font-family: 'Source Code Pro', 'Courier New', Courier, monospace;
     background-color: white;
     color: black;
     box-shadow: 0px 5px 10px darkgray;

@@ -8,7 +8,7 @@
 
 <style>
   .header {
-    font-family: 'Courier New', Courier, monospace;
+    font-family: 'Source Code Pro', 'Courier New', Courier, monospace;
     text-transform: uppercase;
     padding: 1ex;
     font-weight: 900;
