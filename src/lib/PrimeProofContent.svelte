@@ -9,7 +9,7 @@
 
   const primeDetails = getContext('primeDetails') as Writable<PrimeInfoEntry>;
   let proofLink = '#';
-  $: proofLink = `/prime/${$primeDetails.q}`;
+  $: proofLink = `/cert/${$primeDetails.q}`;
 </script>
 
 <span class="info">

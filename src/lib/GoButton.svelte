@@ -3,7 +3,7 @@
 </script>
 
 <div class="container">
-  <a href={`/prime/${n}`} class="go-button">Go</a>
+  <a href={`/cert/${n}`} class="go-button">Go</a>
 </div>
 
 <style>

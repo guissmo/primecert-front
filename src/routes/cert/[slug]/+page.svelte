@@ -20,6 +20,7 @@
   import PrimePageProof from '$lib/PrimePageProof.svelte';
   import PrimeInfoContainer from '$lib/PrimeInfoContainer.svelte';
   import LoadingText from '$lib/LoadingText.svelte';
+  import { MetaTags } from 'svelte-meta-tags';
 
   let primeInfoEntry: GetPrimeInfoResponse;
   let primeInfoResponse: GetPrimeInfoResponse | undefined | null;
@@ -63,14 +64,31 @@
     <PrimePageHeader><LoadingText /></PrimePageHeader>
     <PrimeNavBar />
     <PrimePageContent>
-      <LoadingText /><br />
-      <LoadingText /><br />
-      <LoadingText />
+      <LoadingText text="Finding your prime..." /><br />
+      <LoadingText text="Retrieving data..." /><br />
+      <LoadingText text="Generating catvatar..." />
     </PrimePageContent>
   </PrimeInfoContainer>
 {:else if result == null || !('id' in result)}
   <PrimePageError errorDetails={result} />
 {:else}
+  <MetaTags
+    title={result.name ? result.name : result.n}
+    titleTemplate="%s | PrimeCert"
+    description="Explore the world of primes and name or own your favorite prime numbers greater than 2^64!"
+    canonical={result.slug
+      ? `https://primecert.guissmo.com/cert/${result.slug}`
+      : `https://primecert.guissmo.com/cert/${result.n}`}
+    openGraph={{
+      url: result.slug
+        ? `https://primecert.guissmo.com/cert/${result.slug}`
+        : `https://primecert.guissmo.com/cert/${result.n}`,
+      title: 'PrimeCert',
+      description:
+        'Explore the world of primes and name or own your favorite prime numbers greater than 2^64!',
+      siteName: 'PrimeCert',
+    }}
+  />
   <PrimePageProof />
 {/if}
 

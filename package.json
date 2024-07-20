@@ -29,6 +29,7 @@
   },
   "type": "module",
   "dependencies": {
-    "json-with-bigint": "^2.1.2"
+    "json-with-bigint": "^2.1.2",
+    "svelte-meta-tags": "^3.1.2"
   }
 }

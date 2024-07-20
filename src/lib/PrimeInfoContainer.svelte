@@ -22,6 +22,7 @@
     grid-template-areas:
       'aka prime-name'
       'nav-bar info';
+    grid-template-columns: auto 1fr;
   }
   @media (orientation: portrait) or (max-width: 900px) {
     .outer-container {
@@ -37,6 +38,7 @@
         'prime-name'
         'info'
         'nav-bar';
+      grid-template-columns: 1fr;
     }
   }
 </style>

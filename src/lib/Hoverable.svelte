@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { tap } from 'svelte-gestures';
-
   export let char: string = '';
   export let locked = false;
   export let displayed = false;

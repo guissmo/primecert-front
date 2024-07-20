@@ -15,7 +15,7 @@
   export let color = highlightColors[Math.floor(Math.random() * highlightColors.length)];
 </script>
 
-<a href={`/prime/${primeHref}`} class="clickable-prime" style={`--color: ${color}`}>
+<a href={`/cert/${primeHref}`} class="clickable-prime" style={`--color: ${color}`}>
   <slot />
 </a>
 

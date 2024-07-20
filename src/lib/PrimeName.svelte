@@ -6,6 +6,7 @@
 
   async function handleSubmit(e: SubmitEvent) {
     const target = e.target as HTMLFormElement;
+    e.preventDefault();
     const ACTION_URL = new URL(target.action);
 
     const formData = new FormData(target);
@@ -27,7 +28,14 @@
       method: 'POST',
     });
 
-    location.reload();
+    // get response body
+    const responseJson = await response.json();
+
+    if ('error' in responseJson) {
+      alert(responseJson.error);
+    } else {
+      location.reload();
+    }
   }
 
   const primeDetails = getContext('primeDetails') as Writable<PrimeInfoEntry>;
@@ -43,7 +51,7 @@
       on:submit|preventDefault={handleSubmit}
     >
       <input name="name" class="prime-name-input" placeholder="An Unnamed Prime" minlength="4" />
-      <button class="name-it" type="submit">Name It</button>
+      <button class="name-it link" type="submit">Name It</button>
     </form>
   </PrimePageHeader>
 {/if}
@@ -71,15 +79,31 @@
     margin-left: 2rem;
     background: white;
   }
+  .link {
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 900;
+    font-size: 1rem;
+    background: white;
+    color: black;
+    box-shadow: 0px 5px 5px darkgray;
+    text-align: center;
+    padding: 1em;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .link:hover {
+    box-shadow: 0px 5px 5px #666;
+  }
   @media (orientation: portrait) or (max-width: 900px) {
     .prime-name-input {
-      width: 100%;
+      font-size: 2rem;
+      width: 90%;
     }
     .name-it {
       font-size: 1rem;
       margin-left: 1rem;
-      margin-top: 0px;
-      padding-top: 0px;
+      min-width: fit-content;
+      min-height: fit-content;
     }
     .name-it-form {
       font-size: 2.5rem;

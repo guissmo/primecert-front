@@ -13,4 +13,9 @@
     flex-grow: 1;
     width: calc(100% - 12rem);
   }
+  @media (orientation: portrait) or (max-width: 900px) {
+    .big-number {
+      width: calc(100% - 5rem);
+    }
+  }
 </style>

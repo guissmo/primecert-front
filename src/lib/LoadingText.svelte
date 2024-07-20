@@ -1,7 +1,8 @@
 <script lang="ts">
+  export let text: string = 'Loading...';
 </script>
 
-<span class="loading-text">Loading...</span>
+<span class="loading-text">{text}</span>
 
 <style>
   .loading-text {
